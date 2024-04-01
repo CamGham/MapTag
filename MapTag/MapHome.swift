@@ -10,25 +10,40 @@ import MapKit
 
 struct MapHome: View {
     @State var openProfileSheet = false
+    @State var position: MapCameraPosition = .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: -40.900557, longitude: 174.885971), distance: 20_000_000.0))
     
     private func showProfile() {
         openProfileSheet.toggle()
     }
     
+    private func moveCamera() {
+        position = .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: 40.730610, longitude: -73.935242), distance: 20_000_000.0))
+    }
+    
     var body: some View {
         ZStack {
-            Map()
+            Map(position: $position, interactionModes: [.pan, .zoom])
                 .mapStyle(.hybrid(elevation: .realistic))
                 .mapControls {
                     MapUserLocationButton()
                 }
                 .mapControlVisibility(.visible)
-            VStack {
-                HStack {
+                .onMapCameraChange {
+                    print("cam changed")
+                }
+                
+            HStack {
+                VStack {
                     Button(action: showProfile, label: {
                         Image(systemName: "person.crop.circle")
                     })
                     .buttonStyle(BorderedProminentButtonStyle())
+                    .padding(4)
+                    
+                    Button(action: moveCamera, label: {
+                        Image(systemName: "camera.fill")
+                    })
+                    .buttonStyle(BorderedButtonStyle())
                     .padding(4)
                     
                     Spacer()
