@@ -6,10 +6,17 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct CountryListView: View {
+    @EnvironmentObject var mapTagCamera: MapTagCamera
     @StateObject var countriesVM = CountriesViewModel()
     @State var navPath = NavigationPath()
+    
+    private func navToCountryPos(country: Country) {
+        mapTagCamera.position = .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: country.lattitude, longitude: country.longitude), distance: 20_000_000.0))
+        mapTagCamera.selectedTab = .mapTab
+    }
     
     var body: some View {
         NavigationStack(path: $navPath) {
@@ -26,7 +33,7 @@ struct CountryListView: View {
                                 }).tint(country.isFavourite ? .red : .yellow)
                                 
                                 Button("Show on Map", systemImage: "mappin.and.ellipse", action: {
-                                    // TODO: navigate to position on map
+                                    navToCountryPos(country: country)
                                 })
                                 .tint(.purple)
                             }

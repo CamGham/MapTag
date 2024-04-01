@@ -10,19 +10,19 @@ import MapKit
 
 struct MapHome: View {
     @State var openProfileSheet = false
-    @State var position: MapCameraPosition = .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: -40.900557, longitude: 174.885971), distance: 20_000_000.0))
+    @EnvironmentObject var mapTagCamera: MapTagCamera
     
     private func showProfile() {
         openProfileSheet.toggle()
     }
     
     private func moveCamera() {
-        position = .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: 40.730610, longitude: -73.935242), distance: 20_000_000.0))
+        mapTagCamera.position = .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: 40.730610, longitude: -73.935242), distance: 20_000_000.0))
     }
     
     var body: some View {
         ZStack {
-            Map(position: $position, interactionModes: [.pan, .zoom])
+            Map(position: $mapTagCamera.position, interactionModes: [.pan, .zoom])
                 .mapStyle(.hybrid(elevation: .realistic))
                 .mapControls {
                     MapUserLocationButton()

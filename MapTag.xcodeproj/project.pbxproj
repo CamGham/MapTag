@@ -19,6 +19,7 @@
 		42AD05372BBA717200F08D0B /* CountryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD05362BBA717200F08D0B /* CountryListView.swift */; };
 		42AD05392BBA792B00F08D0B /* CountriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD05382BBA792B00F08D0B /* CountriesViewModel.swift */; };
 		42AD053B2BBAA48500F08D0B /* CountryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD053A2BBAA48500F08D0B /* CountryDetailView.swift */; };
+		42AD053D2BBAB0C900F08D0B /* MapTagCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD053C2BBAB0C900F08D0B /* MapTagCamera.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		42AD05362BBA717200F08D0B /* CountryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryListView.swift; sourceTree = "<group>"; };
 		42AD05382BBA792B00F08D0B /* CountriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesViewModel.swift; sourceTree = "<group>"; };
 		42AD053A2BBAA48500F08D0B /* CountryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryDetailView.swift; sourceTree = "<group>"; };
+		42AD053C2BBAB0C900F08D0B /* MapTagCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTagCamera.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				42AD05082BBA333A00F08D0B /* MapTagApp.swift */,
 				42AD050A2BBA333A00F08D0B /* MapTagTabView.swift */,
 				42AD05322BBA471E00F08D0B /* MapHome.swift */,
+				42AD053C2BBAB0C900F08D0B /* MapTagCamera.swift */,
 				42AD05362BBA717200F08D0B /* CountryListView.swift */,
 				42AD05382BBA792B00F08D0B /* CountriesViewModel.swift */,
 				42AD053A2BBAA48500F08D0B /* CountryDetailView.swift */,
@@ -272,6 +275,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42AD053D2BBAB0C900F08D0B /* MapTagCamera.swift in Sources */,
 				42AD053B2BBAA48500F08D0B /* CountryDetailView.swift in Sources */,
 				42AD05372BBA717200F08D0B /* CountryListView.swift in Sources */,
 				42AD05352BBA4D8300F08D0B /* ProfileView.swift in Sources */,
