@@ -36,7 +36,7 @@ class CountriesViewModel: ObservableObject {
         }
     }
     
-    static let testingCountryData: [Country] = [Country(name: "New Zealand", lattitude: -40.900557, longitude: 174.885971, flagURL: "urlhere")]
+    static let testingCountryData: [Country] = [Country(name: "New Zealand", lattitude: -40.900557, longitude: 174.885971, flagURL: "https://flagcdn.com/w320/nz.png")]
 }
 
 struct Country: Codable, Hashable {
