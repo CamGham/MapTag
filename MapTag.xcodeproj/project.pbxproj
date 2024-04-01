@@ -14,6 +14,9 @@
 		42AD051A2BBA333B00F08D0B /* MapTagTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD05192BBA333B00F08D0B /* MapTagTests.swift */; };
 		42AD05242BBA333B00F08D0B /* MapTagUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD05232BBA333B00F08D0B /* MapTagUITests.swift */; };
 		42AD05262BBA333B00F08D0B /* MapTagUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD05252BBA333B00F08D0B /* MapTagUITestsLaunchTests.swift */; };
+		42AD05332BBA471E00F08D0B /* MapHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD05322BBA471E00F08D0B /* MapHome.swift */; };
+		42AD05352BBA4D8300F08D0B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD05342BBA4D8300F08D0B /* ProfileView.swift */; };
+		42AD05372BBA717200F08D0B /* CountryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD05362BBA717200F08D0B /* CountryListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +47,9 @@
 		42AD051F2BBA333B00F08D0B /* MapTagUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapTagUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		42AD05232BBA333B00F08D0B /* MapTagUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTagUITests.swift; sourceTree = "<group>"; };
 		42AD05252BBA333B00F08D0B /* MapTagUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTagUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		42AD05322BBA471E00F08D0B /* MapHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapHome.swift; sourceTree = "<group>"; };
+		42AD05342BBA4D8300F08D0B /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		42AD05362BBA717200F08D0B /* CountryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +102,9 @@
 			children = (
 				42AD05082BBA333A00F08D0B /* MapTagApp.swift */,
 				42AD050A2BBA333A00F08D0B /* ContentView.swift */,
+				42AD05322BBA471E00F08D0B /* MapHome.swift */,
+				42AD05362BBA717200F08D0B /* CountryListView.swift */,
+				42AD05342BBA4D8300F08D0B /* ProfileView.swift */,
 				42AD050C2BBA333B00F08D0B /* Assets.xcassets */,
 				42AD050E2BBA333B00F08D0B /* Preview Content */,
 			);
@@ -257,8 +266,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42AD05372BBA717200F08D0B /* CountryListView.swift in Sources */,
+				42AD05352BBA4D8300F08D0B /* ProfileView.swift in Sources */,
 				42AD050B2BBA333A00F08D0B /* ContentView.swift in Sources */,
 				42AD05092BBA333A00F08D0B /* MapTagApp.swift in Sources */,
+				42AD05332BBA471E00F08D0B /* MapHome.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +436,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"MapTag/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your location to update your position on the map.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photo library to link your photo locations to the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -452,6 +466,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"MapTag/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your location to update your position on the map.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photo library to link your photo locations to the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
