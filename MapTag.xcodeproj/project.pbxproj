@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		42AD05092BBA333A00F08D0B /* MapTagApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD05082BBA333A00F08D0B /* MapTagApp.swift */; };
-		42AD050B2BBA333A00F08D0B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD050A2BBA333A00F08D0B /* ContentView.swift */; };
+		42AD050B2BBA333A00F08D0B /* MapTagTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD050A2BBA333A00F08D0B /* MapTagTabView.swift */; };
 		42AD050D2BBA333B00F08D0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42AD050C2BBA333B00F08D0B /* Assets.xcassets */; };
 		42AD05102BBA333B00F08D0B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42AD050F2BBA333B00F08D0B /* Preview Assets.xcassets */; };
 		42AD051A2BBA333B00F08D0B /* MapTagTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD05192BBA333B00F08D0B /* MapTagTests.swift */; };
@@ -39,7 +39,7 @@
 /* Begin PBXFileReference section */
 		42AD05052BBA333900F08D0B /* MapTag.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapTag.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42AD05082BBA333A00F08D0B /* MapTagApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTagApp.swift; sourceTree = "<group>"; };
-		42AD050A2BBA333A00F08D0B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		42AD050A2BBA333A00F08D0B /* MapTagTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTagTabView.swift; sourceTree = "<group>"; };
 		42AD050C2BBA333B00F08D0B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		42AD050F2BBA333B00F08D0B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		42AD05152BBA333B00F08D0B /* MapTagTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapTagTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,7 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				42AD05082BBA333A00F08D0B /* MapTagApp.swift */,
-				42AD050A2BBA333A00F08D0B /* ContentView.swift */,
+				42AD050A2BBA333A00F08D0B /* MapTagTabView.swift */,
 				42AD05322BBA471E00F08D0B /* MapHome.swift */,
 				42AD05362BBA717200F08D0B /* CountryListView.swift */,
 				42AD05342BBA4D8300F08D0B /* ProfileView.swift */,
@@ -268,7 +268,7 @@
 			files = (
 				42AD05372BBA717200F08D0B /* CountryListView.swift in Sources */,
 				42AD05352BBA4D8300F08D0B /* ProfileView.swift in Sources */,
-				42AD050B2BBA333A00F08D0B /* ContentView.swift in Sources */,
+				42AD050B2BBA333A00F08D0B /* MapTagTabView.swift in Sources */,
 				42AD05092BBA333A00F08D0B /* MapTagApp.swift in Sources */,
 				42AD05332BBA471E00F08D0B /* MapHome.swift in Sources */,
 			);

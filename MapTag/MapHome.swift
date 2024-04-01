@@ -6,13 +6,42 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct MapHome: View {
+    @State var openProfileSheet = false
+    
+    private func showProfile() {
+        openProfileSheet.toggle()
+    }
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Map()
+                .mapStyle(.hybrid(elevation: .realistic))
+                .mapControls {
+                    MapUserLocationButton()
+                }
+                .mapControlVisibility(.visible)
+            VStack {
+                HStack {
+                    Button(action: showProfile, label: {
+                        Image(systemName: "person.crop.circle")
+                    })
+                    .buttonStyle(BorderedProminentButtonStyle())
+                    .padding(4)
+                    
+                    Spacer()
+                }
+                Spacer()
+            }
+        }
+        .fullScreenCover(isPresented: $openProfileSheet, content: {
+            ProfileView()
+        })        
     }
 }
 
 #Preview {
-    MapHome()
+    MapHome(openProfileSheet: false)
 }
