@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MapTagTabView.swift
 //  MapTag
 //
 //  Created by Cam Graham on 01/04/2024.
@@ -21,7 +21,9 @@ struct MapTagTabView: View {
                 .tag(TabViews.mapTab)
             
             CountryListView()
-                .tabItem { Label("Search", systemImage: "magnifyingglass") }
+                .tabItem {
+                    Label("Search", systemImage: "magnifyingglass")
+                }
                 .tag(TabViews.listTab)
         })
     }
