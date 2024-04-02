@@ -37,7 +37,14 @@ struct ProfileView: View {
                         
                         
                     case .loading(let progress):
-                        ProgressView()
+                        HStack {
+                            Spacer()
+                            ProgressView("Loading selected images...",
+                                         value: progress.fractionCompleted)
+                                .progressViewStyle(.circular)
+                            Spacer()
+                        }
+                        .listRowSeparator(.hidden)
                     case .empty:
                         HStack {
                             Spacer()
