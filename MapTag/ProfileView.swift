@@ -26,7 +26,7 @@ struct ProfileView: View {
                         ScrollView(.horizontal) {
                             HStack(spacing: 2) {
                                 ForEach(images.indices, id: \.self) { index in
-                                    images[index]
+                                    images[index].image
                                         .resizable()
                                         .aspectRatio(1, contentMode: .fill)
                                         .frame(width: 100, height: 100)

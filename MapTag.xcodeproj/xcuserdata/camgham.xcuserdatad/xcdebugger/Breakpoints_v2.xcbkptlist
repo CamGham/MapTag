@@ -56,14 +56,60 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "8060BB6F-DACA-45E5-BB94-2D54EDC3B05F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MapTag/PhotoSelectionViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "loadImages(selectedImages:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "8060BB6F-DACA-45E5-BB94-2D54EDC3B05F - b0f91b9b1fcd9b4f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MapTag.PhotoSelectionViewModel.loadImages(selectedImages: Swift.Array&lt;_PhotosUI_SwiftUI.PhotosPickerItem&gt;) -&gt; __C.NSProgress"
+                  moduleName = "MapTag"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/PhotoSelectionViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "32"
+                  endingLineNumber = "32">
+               </Location>
+               <Location
+                  uuid = "8060BB6F-DACA-45E5-BB94-2D54EDC3B05F - 1084673e8307f7ad"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (_PhotosUI_SwiftUI.PhotosPickerItem) -&gt; () in MapTag.PhotoSelectionViewModel.loadImages(selectedImages: Swift.Array&lt;_PhotosUI_SwiftUI.PhotosPickerItem&gt;) -&gt; __C.NSProgress"
+                  moduleName = "MapTag"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/PhotoSelectionViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "32"
+                  endingLineNumber = "32">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E03E5B77-3E1E-43CB-94FF-23B75C95BFFE"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MapTag/PhotoSelectionViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
             landmarkName = "loadImages(selectedImages:)"
             landmarkType = "7">
          </BreakpointContent>

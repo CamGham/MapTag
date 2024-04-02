@@ -9,6 +9,7 @@ import Foundation
 import Photos
 import PhotosUI
 import SwiftUI
+import ImageIO
 
 class PhotoSelectionViewModel: ObservableObject {
     @Published var imageState: ImageState = .empty
@@ -23,16 +24,31 @@ class PhotoSelectionViewModel: ObservableObject {
         }
     }
     
+    @Published var testing: [MapTagImage] = []
+    
+    
     private func loadImages(selectedImages: [PhotosPickerItem]) -> Progress {
         let totalProgress: MutableProgress = MutableProgress()
-        var loadedImages: [Image] = []
         selectedImages.forEach { image in
             let progress = image.loadTransferable(type: MapTagImage.self) { result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let success?):
-                        loadedImages.append(success.image)
-                        self.imageState = .success(loadedImages)
+                        
+                        if let identifier = image.itemIdentifier {
+                            let meta = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
+                            if let asset = meta.firstObject {
+                                let imageWithMetaData = MapTagImage(image: success.image, phAsset: asset)
+                                self.testing.append(imageWithMetaData)
+                                
+                            } else {
+                                self.testing.append(success)
+                            }
+                        } else {
+                            self.testing.append(success)
+                        }
+
+                        self.imageState = .success(self.testing)
                     case .success(.none):
                         self.imageState = .empty
                     case .failure(let failure):
@@ -68,7 +84,7 @@ class PhotoSelectionViewModel: ObservableObject {
 }
 
 enum ImageState {
-    case success([Image])
+    case success([MapTagImage])
     case loading(Progress)
     case empty
     case failure(Error)
@@ -76,6 +92,7 @@ enum ImageState {
 
 struct MapTagImage: Transferable {
     let image: Image
+    let phAsset: PHAsset?
     
     static var transferRepresentation: some TransferRepresentation {
         DataRepresentation(importedContentType: .image) { data in
@@ -84,7 +101,7 @@ struct MapTagImage: Transferable {
                     throw TransferError.importFailed
                 }
                 let image = Image(uiImage: uiImage)
-                return MapTagImage(image: image)
+                return MapTagImage(image: image, phAsset: nil)
             #else
                 throw TransferError.importFailed
             #endif
