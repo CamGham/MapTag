@@ -38,6 +38,7 @@ struct CountryListView: View {
                                 .tint(.purple)
                             }
                     }
+                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 16))
                     
                 }
             }
@@ -51,6 +52,7 @@ struct CountryListView: View {
 
 #Preview {
     CountryListView()
+        .environmentObject(MapTagCamera())
 }
 
 struct CountryRowView: View {
@@ -67,9 +69,12 @@ struct CountryRowView: View {
             
             
             Text(country.name)
+                .font(.title2)
             if country.isFavourite {
                 Image(systemName: "star.fill")
             }
         }
+        
+        
     }
 }
