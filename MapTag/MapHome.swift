@@ -58,5 +58,7 @@ struct MapHome: View {
 }
 
 #Preview {
+//    @StateObject var mapTagCamera = MapTagCamera()
     MapHome(openProfileSheet: false)
+        .environmentObject(MapTagCamera())
 }
