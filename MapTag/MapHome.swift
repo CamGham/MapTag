@@ -28,10 +28,6 @@ struct MapHome: View {
                     MapUserLocationButton()
                 }
                 .mapControlVisibility(.visible)
-                .onMapCameraChange {
-                    print("cam changed")
-                }
-                
             HStack {
                 VStack {
                     Button(action: showProfile, label: {

@@ -80,7 +80,6 @@ struct ProfileView: View {
                                 }
                                 Spacer()
                             }
-                            Text("Error")
                         }
                     }
                 } header: {
@@ -101,6 +100,30 @@ struct ProfileView: View {
                         .disabled(photoSelectionVM.selectedImages.isEmpty)
                     }
                 }
+                
+                if photoSelectionVM.placemarkCountryKeys.isEmpty && !photoSelectionVM.retrievedImages.isEmpty {
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Image(systemName: "location.slash.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 50, height: 50)
+                                .foregroundStyle(.gray)
+                            Text("No Locations Deteced")
+                                .font(.headline)
+                            Text("Added photos have no location tags.")
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                    }
+                } else {
+                    ForEach(photoSelectionVM.placemarkCountryKeys, id: \.self) { country in
+                        CountryGroupedImageContainer(country: country, images: photoSelectionVM.locationGroupedImages[country] ?? [])
+                        
+                    }
+                }
 
             }
             .navigationTitle("Profile")
@@ -119,6 +142,3 @@ struct ProfileView: View {
 #Preview {
     ProfileView()
 }
-
-
-
