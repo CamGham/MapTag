@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MapTagTabView: View {
     @StateObject var mapTagCamera = MapTagCamera()
+    @StateObject var photoSelectionVM = PhotoSelectionViewModel()
     
     var body: some View {
         TabView(selection: $mapTagCamera.selectedTab,
@@ -19,6 +20,7 @@ struct MapTagTabView: View {
                 }
                 .tag(TabViews.mapTab)
                 .environmentObject(mapTagCamera)
+                .environmentObject(photoSelectionVM)
             
             CountryListView()
                 .tabItem {
@@ -26,6 +28,7 @@ struct MapTagTabView: View {
                 }
                 .tag(TabViews.listTab)
                 .environmentObject(mapTagCamera)
+                .environmentObject(photoSelectionVM)
         })
     }
 }

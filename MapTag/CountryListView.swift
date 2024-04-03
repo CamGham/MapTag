@@ -10,6 +10,7 @@ import MapKit
 
 struct CountryListView: View {
     @EnvironmentObject var mapTagCamera: MapTagCamera
+    @EnvironmentObject var photoSelectionVM: PhotoSelectionViewModel
     @StateObject var countriesVM = CountriesViewModel()
     @State var navPath = NavigationPath()
     

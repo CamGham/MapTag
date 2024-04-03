@@ -12,7 +12,7 @@ import PhotosUI
 struct ProfileView: View {
     @Environment(\.dismiss) var dismiss
     @State var hasPhotos = false
-    @StateObject var photoSelectionVM = PhotoSelectionViewModel()
+    @EnvironmentObject var photoSelectionVM: PhotoSelectionViewModel
     
     @State var publicShowCaseSheet = false
     
@@ -141,4 +141,5 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView()
+        .environmentObject(PhotoSelectionViewModel())
 }

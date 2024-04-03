@@ -62,8 +62,8 @@
             filePath = "MapTag/PhotoSelectionViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
             landmarkName = "loadImages(selectedImages:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,54 +78,10 @@
             filePath = "MapTag/PhotoSelectionViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "loadImages(selectedImages:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "E03E5B77-3E1E-43CB-94FF-23B75C95BFFE - c3be5239e4bf6cc"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Swift.Optional&lt;MapTag.MapTagImage&gt;, Swift.Error&gt;) -&gt; () in closure #1 (_PhotosUI_SwiftUI.PhotosPickerItem) -&gt; () in MapTag.PhotoSelectionViewModel.loadImages(selectedImages: Swift.Array&lt;_PhotosUI_SwiftUI.PhotosPickerItem&gt;) -&gt; __C.NSProgress"
-                  moduleName = "MapTag"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/PhotoSelectionViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58">
-               </Location>
-               <Location
-                  uuid = "E03E5B77-3E1E-43CB-94FF-23B75C95BFFE - 571cc494cdb3253e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;Swift.Optional&lt;MapTag.MapTagImage&gt;, Swift.Error&gt;) -&gt; () in closure #1 (_PhotosUI_SwiftUI.PhotosPickerItem) -&gt; () in MapTag.PhotoSelectionViewModel.loadImages(selectedImages: Swift.Array&lt;_PhotosUI_SwiftUI.PhotosPickerItem&gt;) -&gt; __C.NSProgress"
-                  moduleName = "MapTag"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/PhotoSelectionViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "63"
-                  endingLineNumber = "63">
-               </Location>
-               <Location
-                  uuid = "E03E5B77-3E1E-43CB-94FF-23B75C95BFFE - 571cc494cdb3253e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;Swift.Optional&lt;MapTag.MapTagImage&gt;, Swift.Error&gt;) -&gt; () in closure #1 (_PhotosUI_SwiftUI.PhotosPickerItem) -&gt; () in MapTag.PhotoSelectionViewModel.loadImages(selectedImages: Swift.Array&lt;_PhotosUI_SwiftUI.PhotosPickerItem&gt;) -&gt; __C.NSProgress"
-                  moduleName = "MapTag"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/PhotoSelectionViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "63"
-                  endingLineNumber = "63">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

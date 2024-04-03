@@ -11,6 +11,7 @@ import MapKit
 struct MapHome: View {
     @State var openProfileSheet = false
     @EnvironmentObject var mapTagCamera: MapTagCamera
+    @EnvironmentObject var photoSelectionVM: PhotoSelectionViewModel
     
     private func showProfile() {
         openProfileSheet.toggle()
@@ -22,12 +23,19 @@ struct MapHome: View {
     
     var body: some View {
         ZStack {
-            Map(position: $mapTagCamera.position, interactionModes: [.pan, .zoom])
-                .mapStyle(.hybrid(elevation: .realistic))
-                .mapControls {
-                    MapUserLocationButton()
+            Map(position: $mapTagCamera.position, interactionModes: [.pan, .zoom]) {
+
+                ForEach(mapTagCamera.locations, id: \.self) { location in
+                    Marker(location.country, coordinate: location.location)
                 }
-                .mapControlVisibility(.visible)
+
+                
+            }
+            .mapStyle(.hybrid(elevation: .realistic))
+            .mapControls {
+                MapUserLocationButton()
+            }
+            .mapControlVisibility(.visible)
             HStack {
                 VStack {
                     Button(action: showProfile, label: {
@@ -46,6 +54,9 @@ struct MapHome: View {
                 }
                 Spacer()
             }
+        }
+        .task {
+            await mapTagCamera.getLocations(countries: photoSelectionVM.placemarkCountryKeys)
         }
         .fullScreenCover(isPresented: $openProfileSheet, content: {
             ProfileView()
