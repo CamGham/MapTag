@@ -24,7 +24,32 @@ class PhotoSelectionViewModel: ObservableObject {
         }
     }
     
-    @Published var testing: [MapTagImage] = []
+    @Published var retrievedImages: [MapTagImage] = []
+    let goeCoder = CLGeocoder()
+    
+    var locationGroupedImages: [String: [MapTagImage]] {
+        var tempDict: [String: [MapTagImage]] = [:]
+        retrievedImages.forEach { taggedImage in
+            guard let metaData = taggedImage.phAsset, let location = metaData.location else { return }
+            goeCoder.reverseGeocodeLocation(location) { optionalPlacemarks, errror in
+                guard let placemarks = optionalPlacemarks, let placemark = placemarks.first, let country = placemark.country else { return }
+                
+                // TODO: should keep placemark object?
+                if tempDict.keys.contains(country) {
+                    tempDict[country]?.append(taggedImage)
+                } else {
+                    tempDict[country] = [taggedImage]
+                }
+                // TODO: handle more than 1 location
+                
+            }
+        }
+        return tempDict
+    }
+    
+    var placemarkCountryKeys: [String] {
+        Array(locationGroupedImages.keys).sorted()
+    }
     
     
     private func loadImages(selectedImages: [PhotosPickerItem]) -> Progress {
@@ -39,16 +64,16 @@ class PhotoSelectionViewModel: ObservableObject {
                             let meta = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
                             if let asset = meta.firstObject {
                                 let imageWithMetaData = MapTagImage(image: success.image, phAsset: asset)
-                                self.testing.append(imageWithMetaData)
+                                self.retrievedImages.append(imageWithMetaData)
                                 
                             } else {
-                                self.testing.append(success)
+                                self.retrievedImages.append(success)
                             }
                         } else {
-                            self.testing.append(success)
+                            self.retrievedImages.append(success)
                         }
 
-                        self.imageState = .success(self.testing)
+                        self.imageState = .success(self.retrievedImages)
                     case .success(.none):
                         self.imageState = .empty
                     case .failure(let failure):
