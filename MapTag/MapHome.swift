@@ -11,6 +11,7 @@ import MapKit
 struct MapHome: View {
     @State var openProfileSheet = false
     @EnvironmentObject var mapTagCamera: MapTagCamera
+    @EnvironmentObject var photoSelectionVM: PhotoSelectionViewModel
     
     private func showProfile() {
         openProfileSheet.toggle()
@@ -22,12 +23,20 @@ struct MapHome: View {
     
     var body: some View {
         ZStack {
-            Map(position: $mapTagCamera.position, interactionModes: [.pan, .zoom])
-                .mapStyle(.hybrid(elevation: .realistic))
-                .mapControls {
-                    MapUserLocationButton()
+            Map(position: $mapTagCamera.position, interactionModes: [.pan, .zoom]) {
+
+                ForEach(mapTagCamera.locations, id: \.self) { location in
+
+                    Annotation(location.country, coordinate: location.location.coordinate) {
+                        MapAnnotation(location: location, cameraPosition: $mapTagCamera.position)
+                    }
                 }
-                .mapControlVisibility(.visible)
+            }
+            .mapStyle(.hybrid(elevation: .realistic))
+            .mapControls {
+                MapUserLocationButton()
+            }
+            .mapControlVisibility(.visible)
             HStack {
                 VStack {
                     Button(action: showProfile, label: {
@@ -38,6 +47,7 @@ struct MapHome: View {
                     
                     Button(action: moveCamera, label: {
                         Image(systemName: "camera.fill")
+                        
                     })
                     .buttonStyle(BorderedButtonStyle())
                     .padding(4)
@@ -47,14 +57,17 @@ struct MapHome: View {
                 Spacer()
             }
         }
+        .task {
+            await mapTagCamera.getLocations(countries: photoSelectionVM.placemarkCountryKeys)
+        }
         .fullScreenCover(isPresented: $openProfileSheet, content: {
             ProfileView()
-        })        
+        })
     }
 }
 
 #Preview {
-//    @StateObject var mapTagCamera = MapTagCamera()
     MapHome(openProfileSheet: false)
         .environmentObject(MapTagCamera())
+        .environmentObject(PhotoSelectionViewModel())
 }

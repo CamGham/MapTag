@@ -24,13 +24,17 @@ class PhotoSelectionViewModel: ObservableObject {
         }
     }
     
-    @Published var retrievedImages: [MapTagImage] = []
+    @Published var retrievedImages: [MapTagImage] = [MapTagImage.testData]
     let goeCoder = CLGeocoder()
     
     var locationGroupedImages: [String: [MapTagImage]] {
         var tempDict: [String: [MapTagImage]] = [:]
         retrievedImages.forEach { taggedImage in
-            guard let metaData = taggedImage.phAsset, let location = metaData.location else { return }
+            guard let metaData = taggedImage.phAsset, let location = metaData.location else {
+                // TODO: remove after debug
+                tempDict["New Zealand"] = [taggedImage]
+                return
+            }
             goeCoder.reverseGeocodeLocation(location) { optionalPlacemarks, errror in
                 guard let placemarks = optionalPlacemarks, let placemark = placemarks.first, let country = placemark.country else { return }
                 
@@ -50,6 +54,8 @@ class PhotoSelectionViewModel: ObservableObject {
     var placemarkCountryKeys: [String] {
         Array(locationGroupedImages.keys).sorted()
     }
+    
+    
     
     
     private func loadImages(selectedImages: [PhotosPickerItem]) -> Progress {
@@ -132,9 +138,11 @@ struct MapTagImage: Transferable {
             #endif
         }
     }
+    
+    static let testData: MapTagImage = MapTagImage(image: Image("FoxGlacier"), phAsset: nil)
 }
-
 
 enum TransferError: Error {
     case importFailed
 }
+
