@@ -19,7 +19,7 @@ class MapTagCamera: ObservableObject {
     func getLocations(countries: [String]) async {
         for country in countries {
             if let location = await getCountryLocation(country: country) {
-                self.locations.append(TaggedLocation(country: country, location: CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)))
+                self.locations.append(TaggedLocation(country: country, location: location))
             }
         }
     }
@@ -49,5 +49,5 @@ struct TaggedLocation: Hashable {
     }
     
     var country: String
-    var location: CLLocationCoordinate2D
+    var location: CLLocation
 }

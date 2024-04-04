@@ -26,10 +26,11 @@ struct MapHome: View {
             Map(position: $mapTagCamera.position, interactionModes: [.pan, .zoom]) {
 
                 ForEach(mapTagCamera.locations, id: \.self) { location in
-                    Marker(location.country, coordinate: location.location)
-                }
 
-                
+                    Annotation(location.country, coordinate: location.location.coordinate) {
+                        MapAnnotation(location: location, cameraPosition: $mapTagCamera.position)
+                    }
+                }
             }
             .mapStyle(.hybrid(elevation: .realistic))
             .mapControls {
@@ -46,6 +47,7 @@ struct MapHome: View {
                     
                     Button(action: moveCamera, label: {
                         Image(systemName: "camera.fill")
+                        
                     })
                     .buttonStyle(BorderedButtonStyle())
                     .padding(4)
@@ -60,12 +62,12 @@ struct MapHome: View {
         }
         .fullScreenCover(isPresented: $openProfileSheet, content: {
             ProfileView()
-        })        
+        })
     }
 }
 
 #Preview {
-//    @StateObject var mapTagCamera = MapTagCamera()
     MapHome(openProfileSheet: false)
         .environmentObject(MapTagCamera())
+        .environmentObject(PhotoSelectionViewModel())
 }
