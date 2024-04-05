@@ -52,7 +52,7 @@ class PhotoSelectionViewModel: ObservableObject {
     }
     
     var placemarkCountryKeys: [String] {
-        Array(locationGroupedImages.keys).sorted()
+       locationGroupedImages.keys.sorted()
     }
     
     
@@ -145,3 +145,6 @@ enum TransferError: Error {
     case importFailed
 }
 
+struct CountryKey: Hashable {
+    var countryName: String
+}

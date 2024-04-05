@@ -22,27 +22,45 @@ struct ImageContainerView: View {
         }
     }
     
+    @State var showFullscreen = false
+    @State var selectedIndex: Int = 0
+    
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: gridLayout, alignment: .leading, spacing: 2) {
-                ForEach(images.indices, id: \.self) { index in
-                    GeometryReader(content: { geometry in
-                        images[index].image
-                            .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: geometry.size.width, height: geometry.size.height)
-                        .clipped()
-                    })
-                    .aspectRatio(1, contentMode: .fit)
+        ZStack {
+            ScrollView {
+                LazyVGrid(columns: gridLayout, alignment: .leading, spacing: 2) {
+                    ForEach(images.indices, id: \.self) { index in
+                        Button { 
+                            selectedIndex = index
+                            showFullscreen.toggle()
+                        } label: {
+                            GeometryReader(content: { geometry in
+                                images[index].image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: geometry.size.width, height: geometry.size.height)
+                                    .clipped()
+                            })
+                            .aspectRatio(1, contentMode: .fit)
+                        }
+                        
+                        
+                    }
                 }
             }
+            .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
+            .listRowInsets(.init())
+            if showFullscreen {
+                FullscreenImage(showFullscreen: $showFullscreen, image: images[selectedIndex].image)
+            }
         }
-        .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.inline)
-        .listRowInsets(.init())
+        
     }
 }
 
 #Preview {
-    ImageContainerView(images: Array(repeating: MapTagImage(image: Image("FoxGlacier"), phAsset: nil), count: 8), title: "Test")
+    NavigationStack {
+        ImageContainerView(images: Array(repeating: MapTagImage(image: Image("FoxGlacier"), phAsset: nil), count: 8), title: "Test")
+    }
 }
