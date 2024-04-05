@@ -24,15 +24,18 @@ struct ImageContainerView: View {
     
     @State var showFullscreen = false
     @State var selectedIndex: Int = 0
+    @State var pos: CGPoint = CGPoint(x: 0, y: 0)
     
     var body: some View {
         ZStack {
             ScrollView {
                 LazyVGrid(columns: gridLayout, alignment: .leading, spacing: 2) {
                     ForEach(images.indices, id: \.self) { index in
-                        Button { 
+                        Button {
                             selectedIndex = index
-                            showFullscreen.toggle()
+                            withAnimation {
+                                showFullscreen.toggle()
+                            }
                         } label: {
                             GeometryReader(content: { geometry in
                                 images[index].image
@@ -43,8 +46,6 @@ struct ImageContainerView: View {
                             })
                             .aspectRatio(1, contentMode: .fit)
                         }
-                        
-                        
                     }
                 }
             }
@@ -53,9 +54,9 @@ struct ImageContainerView: View {
             .listRowInsets(.init())
             if showFullscreen {
                 FullscreenImage(showFullscreen: $showFullscreen, image: images[selectedIndex].image)
+                    
             }
         }
-        
     }
 }
 

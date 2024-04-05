@@ -10,73 +10,59 @@ import SwiftUI
 struct FullscreenImage: View {
     @Binding var showFullscreen: Bool
     @State var showToolbars = true
+    
     var image: Image
+    
     var body: some View {
         ZStack(alignment: .center) {
             if !showToolbars {
                 Color.black
+                    .ignoresSafeArea()
             } else {
                 Color.white
             }
-
+                
             image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
         }
-        .ignoresSafeArea()
+        .zIndex(1.0)
+        .transition(.scale.combined(with: .slide))
         .onTapGesture {
             showToolbars.toggle()
         }
-        .toolbar(showToolbars ? .visible : .hidden)
-        .toolbarBackground(.visible, for: .navigationBar)
-        .toolbarBackground(.visible, for: .bottomBar)
+//        .toolbar(showToolbars ? .visible : .hidden, for: .navigationBar)
+        .toolbarBackground(showToolbars ? .visible : .hidden, for: .navigationBar)
         .navigationBarBackButtonHidden()
         .toolbar {
-            ToolbarItem(placement: .navigation) {
-                Button(action: {
-                    showFullscreen.toggle()
-                }, label: {
-                    Image(systemName: "chevron.left")
-                        .font(.headline)
-//                        .font(.callout)
-                        .fontWeight(.semibold)
-                })
-            }
-            ToolbarItem(placement: .principal) {
-                Text("Title")
-            }
+            
+                ToolbarItem(placement: .navigation) {
+                    Button(action: {
+                        withAnimation(.easeIn) {
+                            showFullscreen.toggle()
+                        }
+                    }, label: {
+                        Image(systemName: "chevron.left")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                    })
+                    .foregroundStyle(showToolbars ? Color.accentColor : .black)
+                    .disabled(!showToolbars)
+                }
+            
+                ToolbarItem(placement: .principal) {
+                    Text("Title")
+                }
             
             ToolbarItem(placement: .confirmationAction) {
-                //rectangle.and.arrow.up.right.and.arrow.down.left
-                Button("Force best orientation", systemImage: "rectangle.and.arrow.up.right.and.arrow.down.left") {
-                    
-                    // TODO: Force orientation based on image dimensions
-                    // dismiss toolbar on full screen
-                    print("Force orientation based on image dimensions")
-                    showToolbars.toggle()
+                Button("Add to Showcase", systemImage: "star") {
+                    // TODO: add to showcase
+                    print("add to showcase")
                 }
+                .foregroundStyle(showToolbars ? Color.accentColor : .black)
+                .disabled(!showToolbars)
             }
-            
-            ToolbarItemGroup(placement: .bottomBar) {
-//                Text("Bottom bar")
-                //photo.artframe
-                //crown
-                //heart
-                //trophy
-                //folder.badge.person.crop
-                //person.crop.rectangle.badge.plus
-                Button("Add to showcase", systemImage: "bookmark") {
-                    
-                }
-                
-                
-                //lock for when deciding private or public
-                
-                
-            }
-            
         }
-        
     }
 }
 
