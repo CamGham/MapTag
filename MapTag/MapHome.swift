@@ -26,7 +26,6 @@ struct MapHome: View {
             Map(position: $mapTagCamera.position, interactionModes: [.pan, .zoom]) {
 
                 ForEach(mapTagCamera.locations, id: \.self) { location in
-
                     Annotation(location.country, coordinate: location.location.coordinate) {
                         MapAnnotation(location: location, cameraPosition: $mapTagCamera.position)
                     }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CountryGroupedImageContainer: View {
-    var country: String
+    var countryKey: CountryKey
     var images: [MapTagImage]
     @State var specificCountrySheet = false
     
@@ -28,23 +28,23 @@ struct CountryGroupedImageContainer: View {
             
         } header: {
             HStack {
-                Text(country)
+                Text(countryKey.countryName)
             }
         } footer: {
             HStack {
                 Spacer()
-                Button("View All") {
-                    specificCountrySheet.toggle()
+                
+                NavigationLink(value: countryKey) {
+                    Text("View All")
                 }
                 .disabled(images.isEmpty)
             }
+        
+           
         }
-        .sheet(isPresented: $specificCountrySheet, content: {
-            Text("images here")
-        })
     }
 }
 
 #Preview {
-    CountryGroupedImageContainer(country: "New Zealand", images: [])
+    CountryGroupedImageContainer(countryKey: CountryKey(countryName: "New Zealand"), images: [])
 }

@@ -52,7 +52,7 @@ class PhotoSelectionViewModel: ObservableObject {
     }
     
     var placemarkCountryKeys: [String] {
-        Array(locationGroupedImages.keys).sorted()
+       locationGroupedImages.keys.sorted()
     }
     
     
@@ -65,7 +65,6 @@ class PhotoSelectionViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let success?):
-                        
                         if let identifier = image.itemIdentifier {
                             let meta = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
                             if let asset = meta.firstObject {
@@ -121,7 +120,7 @@ enum ImageState {
     case failure(Error)
 }
 
-struct MapTagImage: Transferable {
+struct MapTagImage: Transferable{
     let image: Image
     let phAsset: PHAsset?
     
@@ -146,3 +145,6 @@ enum TransferError: Error {
     case importFailed
 }
 
+struct CountryKey: Hashable {
+    var countryName: String
+}

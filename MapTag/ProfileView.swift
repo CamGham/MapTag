@@ -16,6 +16,14 @@ struct ProfileView: View {
     
     @State var publicShowCaseSheet = false
     
+    var locationGroupedSections: [CountryKey] {
+        photoSelectionVM.locationGroupedImages.keys.map({ countryName in
+             CountryKey(countryName: countryName)
+        }).sorted { countryKey1, countryKey2 in
+            countryKey1.countryName < countryKey2.countryName
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -119,9 +127,8 @@ struct ProfileView: View {
                         Spacer()
                     }
                 } else {
-                    ForEach(photoSelectionVM.placemarkCountryKeys, id: \.self) { country in
-                        CountryGroupedImageContainer(country: country, images: photoSelectionVM.locationGroupedImages[country] ?? [])
-                        
+                    ForEach(locationGroupedSections, id: \.countryName) { countryKey in
+                        CountryGroupedImageContainer(countryKey: countryKey, images: photoSelectionVM.locationGroupedImages[countryKey.countryName] ?? [])
                     }
                 }
 
@@ -132,10 +139,13 @@ struct ProfileView: View {
                     Button("Dismiss", action: dismiss.callAsFunction)
                 }
             })
+            .navigationDestination(isPresented: $publicShowCaseSheet) {
+                ImageContainerView(images: photoSelectionVM.retrievedImages, title: "Show Case")
+            }
+            .navigationDestination(for: CountryKey.self) { countryKey in
+                ImageContainerView(images: photoSelectionVM.locationGroupedImages[countryKey.countryName] ?? [], title: "Show Case")
+            }
         }
-        .sheet(isPresented: $publicShowCaseSheet, content: {
-            Text("all images here")
-        })
     }
 }
 
