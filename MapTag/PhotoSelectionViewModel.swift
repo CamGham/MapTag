@@ -65,7 +65,6 @@ class PhotoSelectionViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let success?):
-                        
                         if let identifier = image.itemIdentifier {
                             let meta = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
                             if let asset = meta.firstObject {
@@ -121,7 +120,7 @@ enum ImageState {
     case failure(Error)
 }
 
-struct MapTagImage: Transferable {
+struct MapTagImage: Transferable{
     let image: Image
     let phAsset: PHAsset?
     

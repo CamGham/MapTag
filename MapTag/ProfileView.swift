@@ -132,10 +132,10 @@ struct ProfileView: View {
                     Button("Dismiss", action: dismiss.callAsFunction)
                 }
             })
+            .navigationDestination(isPresented: $publicShowCaseSheet) {
+                ImageContainerView(images: photoSelectionVM.retrievedImages, title: "Show Case")
+            }
         }
-        .sheet(isPresented: $publicShowCaseSheet, content: {
-            Text("all images here")
-        })
     }
 }
 
