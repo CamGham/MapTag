@@ -102,12 +102,12 @@ struct MapHome: View {
                             .navigationDestination(for: TaggedLocation.self) { location in
                                 ImageContainerView(images: photoSelectionVM.locationGroupedImages[location.country] ?? [], title: location.country)
                                     .onAppear(perform: {
-                                        withAnimation(.default.delay(0.5)) {
+                                        withAnimation(.default.delay(0.5)){
                                             fullScreenNav.toggle()
                                         }
                                     })
                                     .onDisappear(perform: {
-                                        withAnimation(.default.delay(0.5)) {
+                                        withAnimation{
                                             fullScreenNav.toggle()
                                         }
                                     })
