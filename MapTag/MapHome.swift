@@ -22,6 +22,8 @@ struct MapHome: View {
         mapTagCamera.position = .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: 40.730610, longitude: -73.935242), distance: 20_000_000.0))
     }
     
+    @State var fullScreenNav = false
+    
     var body: some View {
         ZStack {
             Map(position: $mapTagCamera.position, interactionModes: [.pan, .zoom]) {
@@ -73,43 +75,53 @@ struct MapHome: View {
             }
             
             if let navigatedLocation = selectedLocation {
+                
                 GeometryReader { geo in
+                    
                     VStack {
-                        HStack {
-                            Text(navigatedLocation.country)
-                                .font(.title)
-                                
-                            Spacer()
-                            Button("Dismiss") {
-                                withAnimation {
-                                    selectedLocation = nil
+                        NavigationStack {
+                            VStack {
+                                Form(content: {
+                                    Text("Content")
+                                    
+                                    NavigationLink("Test link", value: navigatedLocation)
+                                        
+                                    
+                                })
+                            }
+                            .navigationTitle(navigatedLocation.country)
+                            .toolbar(content: {
+                                ToolbarItem(placement: .confirmationAction) {
+                                    Button("Dismiss") {
+                                        withAnimation {
+                                            selectedLocation = nil
+                                        }
+                                    }
                                 }
-//                            completion: {
-//                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-////                                        mapTagCamera.selectedLocation = nil
-//                                    }
-//                                }
+                            })
+                            .navigationDestination(for: TaggedLocation.self) { location in
+                                ImageContainerView(images: photoSelectionVM.locationGroupedImages[location.country] ?? [], title: location.country)
+                                    .onAppear(perform: {
+                                        withAnimation(.default.delay(0.5)) {
+                                            fullScreenNav.toggle()
+                                        }
+                                    })
+                                    .onDisappear(perform: {
+                                        withAnimation(.default.delay(0.5)) {
+                                            fullScreenNav.toggle()
+                                        }
+                                    })
                             }
                         }
-                        .padding()
-                        
-                        Spacer()
-                        Text("asd")
-                        Spacer()
                     }
-                    .frame(width: geo.size.width * 0.8, height: geo.size.height * 0.8)
-                    .background(.bar)
+                    .frame(width: fullScreenNav ? geo.size.width : geo.size.width * 0.8, height: fullScreenNav ? geo.size.height * 0.99 : geo.size.height * 0.8)
                     .clipShape(.rect(cornerRadius: 20.0))
                     .position(CGPoint(x: geo.frame(in: .local).midX, y: geo.frame(in: .local).midY))
                     .background(.black.opacity(0.4))
-//                    .background(.windowBackground)
-//                    .background(.ultraThinMaterial)
-                    
                 }
                 .transition(.opacity)
                 .zIndex(1)
             }
-            
         }
         .task(id: photoSelectionVM.placemarkCountryKeys, {
             await mapTagCamera.getLocations(countries: photoSelectionVM.placemarkCountryKeys)
