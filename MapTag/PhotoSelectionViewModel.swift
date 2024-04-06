@@ -23,16 +23,26 @@ class PhotoSelectionViewModel: ObservableObject {
             }
         }
     }
-    
-    @Published var retrievedImages: [MapTagImage] = [MapTagImage.testData]
+    //MapTagImage.testData
+    @Published var retrievedImages: [MapTagImage] = []
     let goeCoder = CLGeocoder()
+    
+    var showcaseImages: [MapTagImage] {
+        retrievedImages.filter { mapTagImage in
+            mapTagImage.showcased
+        }
+    }
     
     var locationGroupedImages: [String: [MapTagImage]] {
         var tempDict: [String: [MapTagImage]] = [:]
         retrievedImages.forEach { taggedImage in
             guard let metaData = taggedImage.phAsset, let location = metaData.location else {
                 // TODO: remove after debug
-                tempDict["New Zealand"] = [taggedImage]
+                if tempDict.keys.contains("New Zealand") {
+                    tempDict["New Zealand"]?.append(taggedImage)
+                } else {
+                    tempDict["New Zealand"] = [taggedImage]
+                }
                 return
             }
             goeCoder.reverseGeocodeLocation(location) { optionalPlacemarks, errror in
@@ -52,9 +62,14 @@ class PhotoSelectionViewModel: ObservableObject {
     }
     
     var placemarkCountryKeys: [String] {
-       locationGroupedImages.keys.sorted()
+        locationGroupedImages.keys.sorted()
     }
     
+    func getImageOriginIndex(mapTagImage: MapTagImage) -> Int? {
+        retrievedImages.firstIndex { image in
+            image == mapTagImage
+        }
+    }
     
     
     
@@ -68,7 +83,7 @@ class PhotoSelectionViewModel: ObservableObject {
                         if let identifier = image.itemIdentifier {
                             let meta = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
                             if let asset = meta.firstObject {
-                                let imageWithMetaData = MapTagImage(image: success.image, phAsset: asset)
+                                let imageWithMetaData = MapTagImage(id: asset.localIdentifier, image: success.image, phAsset: asset)
                                 self.retrievedImages.append(imageWithMetaData)
                                 
                             } else {
@@ -120,9 +135,11 @@ enum ImageState {
     case failure(Error)
 }
 
-struct MapTagImage: Transferable{
+struct MapTagImage: Transferable, Identifiable, Equatable {
+    var id: String = UUID().uuidString
     let image: Image
     let phAsset: PHAsset?
+    var showcased = false
     
     static var transferRepresentation: some TransferRepresentation {
         DataRepresentation(importedContentType: .image) { data in

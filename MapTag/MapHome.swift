@@ -56,9 +56,9 @@ struct MapHome: View {
                 Spacer()
             }
         }
-        .task {
+        .task(id: photoSelectionVM.placemarkCountryKeys, {
             await mapTagCamera.getLocations(countries: photoSelectionVM.placemarkCountryKeys)
-        }
+        })
         .fullScreenCover(isPresented: $openProfileSheet, content: {
             ProfileView()
         })
