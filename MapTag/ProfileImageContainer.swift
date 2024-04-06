@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct CountryGroupedImageContainer: View {
-    var countryKey: CountryKey
+struct ProfileImageContainer: View {
+    var hashableNavigation: any Hashable
+    var headerTitle: String
     var images: [MapTagImage]
-    @State var specificCountrySheet = false
     
     var body: some View {
         Section {
@@ -28,13 +28,13 @@ struct CountryGroupedImageContainer: View {
             
         } header: {
             HStack {
-                Text(countryKey.countryName)
+                Text(headerTitle)
             }
         } footer: {
             HStack {
                 Spacer()
                 
-                NavigationLink(value: countryKey) {
+                NavigationLink(value: hashableNavigation) {
                     Text("View All")
                 }
                 .disabled(images.isEmpty)
@@ -46,5 +46,5 @@ struct CountryGroupedImageContainer: View {
 }
 
 #Preview {
-    CountryGroupedImageContainer(countryKey: CountryKey(countryName: "New Zealand"), images: [])
+    ProfileImageContainer(hashableNavigation: CountryKey(countryName: "New Zealand"), headerTitle: CountryKey(countryName: "New Zealand").countryName, images: [])
 }

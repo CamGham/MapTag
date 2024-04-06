@@ -12,6 +12,7 @@ struct FullscreenImage: View {
     @State var showToolbars = true
     
     var image: Image
+    @Binding var isShowcased: Bool
     
     var body: some View {
         ZStack(alignment: .center) {
@@ -55,9 +56,8 @@ struct FullscreenImage: View {
                 }
             
             ToolbarItem(placement: .confirmationAction) {
-                Button("Add to Showcase", systemImage: "star") {
-                    // TODO: add to showcase
-                    print("add to showcase")
+                Button("Add to Showcase", systemImage: isShowcased ? "star.fill" : "star") {
+                    isShowcased.toggle()
                 }
                 .foregroundStyle(showToolbars ? Color.accentColor : .black)
                 .disabled(!showToolbars)
@@ -69,6 +69,6 @@ struct FullscreenImage: View {
 #Preview {
     NavigationStack {
         
-        FullscreenImage(showFullscreen: .constant(true), image: Image("FoxGlacier"))
+        FullscreenImage(showFullscreen: .constant(true), image: Image("FoxGlacier"), isShowcased: .constant(false))
     }
 }

@@ -14,19 +14,63 @@ struct ProfileView: View {
     @State var hasPhotos = false
     @EnvironmentObject var photoSelectionVM: PhotoSelectionViewModel
     
-    @State var publicShowCaseSheet = false
+    @State var displayShowCase = false
+    @State var showAllSelected = false
     
     var locationGroupedSections: [CountryKey] {
         photoSelectionVM.locationGroupedImages.keys.map({ countryName in
-             CountryKey(countryName: countryName)
+            CountryKey(countryName: countryName)
         }).sorted { countryKey1, countryKey2 in
             countryKey1.countryName < countryKey2.countryName
         }
     }
     
+    @State var showError = false
+    
     var body: some View {
         NavigationStack {
             Form {
+                if !photoSelectionVM.retrievedImages.isEmpty {
+                    Section {
+                        if photoSelectionVM.showcaseImages.isEmpty {
+                            Button("Create your showcase") {
+                                print("Initial showcase creation")
+                            }
+                            .disabled(photoSelectionVM.retrievedImages.isEmpty)
+                        } else {
+                            ScrollView(.horizontal) {
+                                HStack(spacing: 2) {
+                                    ForEach(photoSelectionVM.showcaseImages.indices, id: \.self) { index in
+                                        photoSelectionVM.showcaseImages[index].image
+                                            .resizable()
+                                            .aspectRatio(1, contentMode: .fill)
+                                            .frame(width: 100, height: 100)
+                                    }
+                                }
+                            }
+                        }
+                    } header: {
+                        HStack {
+                            Text("Private Showcase")
+                            
+                            Spacer()
+                            //                        PhotosPicker(selection: $photoSelectionVM.selectedImages) {
+                            //                            Image(systemName: "photo.badge.plus")
+                            //                        }
+                            Text("showcase selector")
+                        }
+                    } footer: {
+                        HStack {
+                            Spacer()
+                            Button("View All") {
+                                displayShowCase.toggle()
+                            }
+                            .disabled(photoSelectionVM.showcaseImages.isEmpty)
+                        }
+                    }
+                }
+                
+                
                 Section {
                     switch photoSelectionVM.imageState {
                     case .success(let images):
@@ -49,11 +93,29 @@ struct ProfileView: View {
                             Spacer()
                             ProgressView("Loading selected images...",
                                          value: progress.fractionCompleted)
-                                .progressViewStyle(.circular)
+                            .progressViewStyle(.circular)
                             Spacer()
                         }
                         .listRowSeparator(.hidden)
                     case .empty:
+                        HStack {
+                            Spacer()
+                            VStack {
+                                Image(systemName: "photo.on.rectangle.angled")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 50, height: 50)
+                                    .foregroundStyle(.gray)
+                                Text("No Photos Added")
+                                    .font(.headline)
+                                Text("Selected photos will appear here")
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                        }
+                    case .failure(let error):
+                        
                         HStack {
                             Spacer()
                             VStack {
@@ -70,29 +132,21 @@ struct ProfileView: View {
                             }
                             Spacer()
                         }
-                    case .failure(let error):
-                        ZStack {
-                            HStack {
-                                Spacer()
-                                VStack {
-                                    Image(systemName: "photo.on.rectangle.angled")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 50, height: 50)
-                                        .foregroundStyle(.gray)
-                                    Text("No Photos Added")
-                                        .font(.headline)
-                                    Text("Showcase photos will appear here")
-                                        .font(.footnote)
-                                        .foregroundStyle(.secondary)
-                                }
-                                Spacer()
+                        .onAppear(perform: {
+                            showError.toggle()
+                        })
+                        .alert("Image Retrieval Failed", isPresented: $showError) {
+                            Button("Ok", role: .cancel) {
+                                showError.toggle()
                             }
+                        } message: {
+                            Text("An error occured while attempting to retrieve your selected image/s: \(error.localizedDescription)")
                         }
+                        
                     }
                 } header: {
                     HStack {
-                        Text("Public Showcase")
+                        Text("Your Photos")
                         
                         Spacer()
                         PhotosPicker(selection: $photoSelectionVM.selectedImages) {
@@ -103,7 +157,7 @@ struct ProfileView: View {
                     HStack {
                         Spacer()
                         Button("View All") {
-                            publicShowCaseSheet.toggle()
+                            showAllSelected.toggle()
                         }
                         .disabled(photoSelectionVM.selectedImages.isEmpty)
                     }
@@ -128,10 +182,10 @@ struct ProfileView: View {
                     }
                 } else {
                     ForEach(locationGroupedSections, id: \.countryName) { countryKey in
-                        CountryGroupedImageContainer(countryKey: countryKey, images: photoSelectionVM.locationGroupedImages[countryKey.countryName] ?? [])
+                        ProfileImageContainer(hashableNavigation: countryKey, headerTitle: countryKey.countryName, images: photoSelectionVM.locationGroupedImages[countryKey.countryName] ?? [])
                     }
                 }
-
+                
             }
             .navigationTitle("Profile")
             .toolbar(content: {
@@ -139,11 +193,14 @@ struct ProfileView: View {
                     Button("Dismiss", action: dismiss.callAsFunction)
                 }
             })
-            .navigationDestination(isPresented: $publicShowCaseSheet) {
-                ImageContainerView(images: photoSelectionVM.retrievedImages, title: "Show Case")
+            .navigationDestination(isPresented: $showAllSelected) {
+                ImageContainerView(images: photoSelectionVM.retrievedImages, title: "Selected Images")
+            }
+            .navigationDestination(isPresented: $displayShowCase) {
+                ImageContainerView(images: photoSelectionVM.showcaseImages, title: "Show Case")
             }
             .navigationDestination(for: CountryKey.self) { countryKey in
-                ImageContainerView(images: photoSelectionVM.locationGroupedImages[countryKey.countryName] ?? [], title: "Show Case")
+                ImageContainerView(images: photoSelectionVM.locationGroupedImages[countryKey.countryName] ?? [], title: countryKey.countryName)
             }
         }
     }

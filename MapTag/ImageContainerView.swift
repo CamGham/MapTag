@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ImageContainerView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
+    @EnvironmentObject var photoSelectionVM: PhotoSelectionViewModel
     let imageSize: CGFloat = 100
     
     var images: [MapTagImage]
@@ -52,8 +53,8 @@ struct ImageContainerView: View {
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .listRowInsets(.init())
-            if showFullscreen {
-                FullscreenImage(showFullscreen: $showFullscreen, image: images[selectedIndex].image)
+            if showFullscreen, let originalIndex = photoSelectionVM.getImageOriginIndex(mapTagImage: images[selectedIndex]) {
+                FullscreenImage(showFullscreen: $showFullscreen, image: images[selectedIndex].image, isShowcased: $photoSelectionVM.retrievedImages[originalIndex].showcased)
                     
             }
         }
