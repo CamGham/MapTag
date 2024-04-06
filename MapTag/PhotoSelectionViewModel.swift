@@ -24,7 +24,7 @@ class PhotoSelectionViewModel: ObservableObject {
         }
     }
     //MapTagImage.testData
-    @Published var retrievedImages: [MapTagImage] = []
+    @Published var retrievedImages: [MapTagImage] = [MapTagImage.testData]
     let goeCoder = CLGeocoder()
     
     var showcaseImages: [MapTagImage] {

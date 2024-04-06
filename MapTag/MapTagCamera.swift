@@ -37,6 +37,16 @@ class MapTagCamera: ObservableObject {
         return loc
     }
     
+//    @Published var selectedLocation: TaggedLocation? = nil {
+//        didSet {
+//            withAnimation {
+//                showLocationPin.toggle()
+//            }
+//        }
+//    }
+//    
+//    @Published var showLocationPin: Bool = false
+    
 }
 
 struct TaggedLocation: Hashable {
