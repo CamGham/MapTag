@@ -10,11 +10,17 @@ import SwiftUI
 import MapKit
 
 @MainActor
-class MapTagCamera: ObservableObject {
+class MapViewModel: ObservableObject {
     @Published var selectedTab = TabViews.mapTab
-    @Published var position: MapCameraPosition = .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: -40.900557, longitude: 174.885971), distance: 20_000_000.0))
+    // cameraPostion
+    @Published var mapCameraPosition: MapCameraPosition = .userLocation(fallback: .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: -40.900557, longitude: 174.885971), distance: 20_000_000.0)))
     @Published var locations: [TaggedLocation] = []
+    @Published var selection: TaggedLocation?
+    
     let goeCoder = CLGeocoder()
+    
+    
+    
     
     func getLocations(countries: [String]) async {
         for country in countries {
@@ -36,6 +42,35 @@ class MapTagCamera: ObservableObject {
         }
         return loc
     }
+    
+//    var distance: Double {
+//        mapChangeContext
+//    }
+    
+//    func getAnimationTime(taggedLocationCoordinate: CLLocationCoordinate2D) -> CGFloat {
+//        if let distance = getDistance(taggedLocationCoordinate: taggedLocationCoordinate) {
+//            // TODO: calc the time
+//            print("Distance is \(distance)")
+//        }
+//        return 1.0
+//    }
+    
+//    func getDistance(taggedLocationCoordinate: CLLocationCoordinate2D) -> CLLocationDistance? {
+//        let mapPoint: MKMapPoint = MKMapPoint(taggedLocationCoordinate)
+//        if let camera = mapCameraPosition.camera {
+//            let cameraPoint = MKMapPoint(camera.centerCoordinate)
+//            return cameraPoint.distance(to: mapPoint)
+//        } else if let region = mapCameraPosition.region {
+//            let regionPoint = MKMapPoint(region.center)
+//            return regionPoint.distance(to: mapPoint)
+//        } else if let rect = mapCameraPosition.rect { // user positioned point
+//            let rectPoint = rect.origin
+//            return rectPoint.distance(to: mapPoint)
+//        }
+//        return nil
+//    }
+    
+    
     
 //    @Published var selectedLocation: TaggedLocation? = nil {
 //        didSet {
@@ -60,4 +95,5 @@ struct TaggedLocation: Hashable {
     
     var country: String
     var location: CLLocation
+    
 }

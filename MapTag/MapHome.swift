@@ -9,51 +9,68 @@ import SwiftUI
 import MapKit
 
 struct MapHome: View {
-    @State var openProfileSheet = false
-//    @State var selectedLocation: TaggedLocation? = nil
-    @EnvironmentObject var mapTagCamera: MapTagCamera
+    @EnvironmentObject var mapVM: MapViewModel
     @EnvironmentObject var photoSelectionVM: PhotoSelectionViewModel
-    @State var selectedLocation: TaggedLocation? = nil
+    
+    @State var openProfileSheet = false
+    @State var navigatedLocation: TaggedLocation? = nil
+    
     private func showProfile() {
         openProfileSheet.toggle()
     }
     
-    private func moveCamera() {
-        mapTagCamera.position = .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: 40.730610, longitude: -73.935242), distance: 20_000_000.0))
-    }
-    
+    @State private var moveCamera: Bool = false
     @State var fullScreenNav = false
+    
+    
+    var pointsOfInterest: [MKPointOfInterestCategory] = [.airport,.amusementPark,.aquarium,.bakery,.beach,.brewery, .cafe,.campground,.carRental,.foodMarket,.gasStation,.hotel,.marina,.museum,.nationalPark,.nightlife,.park,.parking,.publicTransport,.restaurant,.stadium,.store,.winery,.zoo]
     
     var body: some View {
         ZStack {
-            Map(position: $mapTagCamera.position, interactionModes: [.pan, .zoom]) {
-
-                ForEach(mapTagCamera.locations, id: \.self) { location in
+            Map(position: $mapVM.mapCameraPosition, interactionModes: [.pan, .zoom], selection: $mapVM.selection) {
+                ForEach(mapVM.locations, id: \.self) { location in
                     Annotation(location.country, coordinate: location.location.coordinate) {
                         MapAnnotation(location: location)
-                            .onTapGesture {
-                                withAnimation(.easeInOut) {
-                                    mapTagCamera.position =
-                                        .region(MKCoordinateRegion(center: location.location.coordinate, span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)))
-                                } completion: {
-                                    
-                                    // TODO: make delay based on distance from old location
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.25) {
-                                        withAnimation {
-                                            selectedLocation = location
-                                        }
-                                        
-                                    }
-                                }
-                            }
+                            .tag(location)
                     }
                 }
+            
+                UserAnnotation()
             }
-            .mapStyle(.hybrid(elevation: .realistic))
+            .onMapCameraChange(frequency: .onEnd, { mapCameraContext in
+                // if user taps an annotation
+                // and camera ends at expected location (animation was not interupted by user)
+                if let selection = mapVM.selection,
+                   (Double(mapCameraContext.camera.centerCoordinate.latitude).rounded(toPlaces: 2) == Double(selection.location.coordinate.latitude).rounded(toPlaces: 2) &&
+                    Double(mapCameraContext.camera.centerCoordinate.longitude).rounded(toPlaces: 2) == Double(selection.location.coordinate.longitude).rounded(toPlaces: 2)) {
+                    // show popover
+                        withAnimation {
+                            navigatedLocation = mapVM.selection
+                        }
+                }
+                // clear selection so tap is registered every annotation tap
+                mapVM.selection = nil
+            })
+            .onReceive(mapVM.$selection, perform: { newSelection in
+                if newSelection != nil {
+                    moveCamera.toggle()
+                }
+            })
+
+            .mapCameraKeyframeAnimator(trigger: moveCamera, keyframes: { mapCamera in
+                KeyframeTrack(\MapCamera.centerCoordinate) {
+                    CubicKeyframe(mapVM.selection!.location.coordinate, duration: 0.5)
+                }
+            })
+            
+            .mapStyle(.hybrid(elevation: .realistic,
+                              pointsOfInterest: PointOfInterestCategories.including(pointsOfInterest),
+                              showsTraffic: false))
             .mapControls {
                 MapUserLocationButton()
             }
             .mapControlVisibility(.visible)
+            
             HStack {
                 VStack {
                     Button(action: showProfile, label: {
@@ -62,7 +79,9 @@ struct MapHome: View {
                     .buttonStyle(BorderedProminentButtonStyle())
                     .padding(4)
                     
-                    Button(action: moveCamera, label: {
+                    Button(action: {
+                        print("do something")
+                    }, label: {
                         Image(systemName: "camera.fill")
                         
                     })
@@ -73,58 +92,11 @@ struct MapHome: View {
                 }
                 Spacer()
             }
-            
-            if let navigatedLocation = selectedLocation {
-                
-                GeometryReader { geo in
-                    
-                    VStack {
-                        NavigationStack {
-                            VStack {
-                                Form(content: {
-                                    Text("Content")
-                                    
-                                    NavigationLink("Test link", value: navigatedLocation)
-                                        
-                                    
-                                })
-                            }
-                            .navigationTitle(navigatedLocation.country)
-                            .toolbar(content: {
-                                ToolbarItem(placement: .confirmationAction) {
-                                    Button("Dismiss") {
-                                        withAnimation {
-                                            selectedLocation = nil
-                                        }
-                                    }
-                                }
-                            })
-                            .navigationDestination(for: TaggedLocation.self) { location in
-                                ImageContainerView(images: photoSelectionVM.locationGroupedImages[location.country] ?? [], title: location.country)
-                                    .onAppear(perform: {
-                                        withAnimation(.default.delay(0.5)){
-                                            fullScreenNav.toggle()
-                                        }
-                                    })
-                                    .onDisappear(perform: {
-                                        withAnimation{
-                                            fullScreenNav.toggle()
-                                        }
-                                    })
-                            }
-                        }
-                    }
-                    .frame(width: fullScreenNav ? geo.size.width : geo.size.width * 0.8, height: fullScreenNav ? geo.size.height * 0.99 : geo.size.height * 0.8)
-                    .clipShape(.rect(cornerRadius: 20.0))
-                    .position(CGPoint(x: geo.frame(in: .local).midX, y: geo.frame(in: .local).midY))
-                    .background(.black.opacity(0.4))
-                }
-                .transition(.opacity)
-                .zIndex(1)
-            }
+            // if show inside view
+            LocationModalView(locationDict: photoSelectionVM.locationGroupedImages, navigatedLocation: $navigatedLocation)
         }
         .task(id: photoSelectionVM.placemarkCountryKeys, {
-            await mapTagCamera.getLocations(countries: photoSelectionVM.placemarkCountryKeys)
+            await mapVM.getLocations(countries: photoSelectionVM.placemarkCountryKeys)
         })
         .fullScreenCover(isPresented: $openProfileSheet, content: {
             ProfileView()
@@ -136,6 +108,6 @@ struct MapHome: View {
 //    let loc = TaggedLocation(country: "New Zealand", location: CLLocation(latitude: -40.900557, longitude: 174.885971))
     
     MapHome(openProfileSheet: false)
-        .environmentObject(MapTagCamera())
+        .environmentObject(MapViewModel())
         .environmentObject(PhotoSelectionViewModel())
 }
