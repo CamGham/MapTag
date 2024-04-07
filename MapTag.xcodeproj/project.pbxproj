@@ -103,6 +103,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4201EC292BC2A0FF004C1CC0 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				42AD05322BBA471E00F08D0B /* MapHome.swift */,
+				42AD053C2BBAB0C900F08D0B /* MapViewModel.swift */,
+				42B1431F2BBE93BC001500DA /* MapAnnotation.swift */,
+				42EE6FC62BC164A800E7313A /* LocationModalView.swift */,
+				4253BE9D2BC23A6600BD4E58 /* CountryBoundry.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		4201EC2A2BC2A14A004C1CC0 /* List */ = {
+			isa = PBXGroup;
+			children = (
+				42AD05362BBA717200F08D0B /* CountryListView.swift */,
+				42AD05382BBA792B00F08D0B /* CountriesViewModel.swift */,
+				42AD053A2BBAA48500F08D0B /* CountryDetailView.swift */,
+			);
+			path = List;
+			sourceTree = "<group>";
+		};
 		42AD04FC2BBA333900F08D0B = {
 			isa = PBXGroup;
 			children = (
@@ -126,17 +148,11 @@
 		42AD05072BBA333900F08D0B /* MapTag */ = {
 			isa = PBXGroup;
 			children = (
+				4201EC2A2BC2A14A004C1CC0 /* List */,
+				4201EC292BC2A0FF004C1CC0 /* Map */,
 				42EE6FC82BC2225900E7313A /* Resources */,
 				42AD05082BBA333A00F08D0B /* MapTagApp.swift */,
 				42AD050A2BBA333A00F08D0B /* MapTagTabView.swift */,
-				42AD05322BBA471E00F08D0B /* MapHome.swift */,
-				42B1431F2BBE93BC001500DA /* MapAnnotation.swift */,
-				42AD053C2BBAB0C900F08D0B /* MapViewModel.swift */,
-				42EE6FC62BC164A800E7313A /* LocationModalView.swift */,
-				4253BE9D2BC23A6600BD4E58 /* CountryBoundry.swift */,
-				42AD05362BBA717200F08D0B /* CountryListView.swift */,
-				42AD05382BBA792B00F08D0B /* CountriesViewModel.swift */,
-				42AD053A2BBAA48500F08D0B /* CountryDetailView.swift */,
 				42AD05342BBA4D8300F08D0B /* ProfileView.swift */,
 				4288961B2BBFD3D400884287 /* ImageContainerView.swift */,
 				4288961D2BBFF26E00884287 /* FullscreenImage.swift */,

@@ -33,8 +33,6 @@ struct MapHome: View {
             // use ploygon to highlight country
             
             Map(position: $mapVM.mapCameraPosition, interactionModes: [.pan, .zoom], selection: $mapVM.selection) {
-                
-                
                 ForEach(mapVM.taggedLocations, id: \.self) { location in
                     Annotation(location.country, coordinate: location.location.coordinate) {
                         MapAnnotation(location: location)
@@ -49,6 +47,13 @@ struct MapHome: View {
                 
                 UserAnnotation()
             }
+            .mapStyle(.hybrid(elevation: .realistic,
+                              pointsOfInterest: PointOfInterestCategories.including(pointsOfInterest),
+                              showsTraffic: false))
+            .mapControls {
+                MapUserLocationButton()
+            }
+            .mapControlVisibility(.visible)
             .onMapCameraChange(frequency: .onEnd, { mapCameraContext in
                 // if user taps an annotation
                 // and camera ends at expected location (animation was not interupted by user)
@@ -59,20 +64,9 @@ struct MapHome: View {
                         withAnimation {
                             navigatedLocation = selection
                         }
-//                    mapVM.selectTappedCountry(countryName: selection.country)
-//                    withAnimation(.easeOut(duration: 0.5)) {
-//                        animatePoly.toggle()
-//                    }
                 }
                 // clear selection so tap is registered every annotation tap
                 mapVM.selection = nil
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//                    withAnimation {
-//                        animatePoly.toggle()
-//                    }
-//                    mapVM.tappedCountry = []
-//                }
-                
                 mapVM.setCurrentPosition(mapCameraContext: mapCameraContext)
             })
             .onReceive(mapVM.$selection, perform: { newSelection in
@@ -82,7 +76,6 @@ struct MapHome: View {
                     moveCamera.toggle()
                 }
             })
-
             .mapCameraKeyframeAnimator(trigger: moveCamera, keyframes: { mapCamera in
                 KeyframeTrack(\MapCamera.centerCoordinate) {
                     CubicKeyframe(mapVM.selection!.location.coordinate, duration: mapVM.animationDuration)
@@ -92,14 +85,6 @@ struct MapHome: View {
                     CubicKeyframe(mapVM.calculatedCameraHeight, duration: mapVM.animationDuration)
                 }
             })
-            
-            .mapStyle(.hybrid(elevation: .realistic,
-                              pointsOfInterest: PointOfInterestCategories.including(pointsOfInterest),
-                              showsTraffic: false))
-            .mapControls {
-                MapUserLocationButton()
-            }
-            .mapControlVisibility(.visible)
             
             HStack {
                 VStack {
