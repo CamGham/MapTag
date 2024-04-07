@@ -22,19 +22,31 @@ struct MapHome: View {
     @State private var moveCamera: Bool = false
     @State var fullScreenNav = false
     
-    
+    // TODO: let user change the interest filters
     var pointsOfInterest: [MKPointOfInterestCategory] = [.airport,.amusementPark,.aquarium,.bakery,.beach,.brewery, .cafe,.campground,.carRental,.foodMarket,.gasStation,.hotel,.marina,.museum,.nationalPark,.nightlife,.park,.parking,.publicTransport,.restaurant,.stadium,.store,.winery,.zoo]
     
     var body: some View {
         ZStack {
+            
+            // TODO:
+            // map reader to find clicks on map -> find clicked country
+            // use ploygon to highlight country
+            
             Map(position: $mapVM.mapCameraPosition, interactionModes: [.pan, .zoom], selection: $mapVM.selection) {
-                ForEach(mapVM.locations, id: \.self) { location in
+                
+                
+                ForEach(mapVM.taggedLocations, id: \.self) { location in
                     Annotation(location.country, coordinate: location.location.coordinate) {
                         MapAnnotation(location: location)
                             .tag(location)
                     }
                 }
-            
+//                ForEach(mapVM.tappedCountry, id: \.self) { poly in
+//                    MapPolygon(poly)
+//                        .foregroundStyle(.white.opacity(animatePoly ? 1.0 : 0.3))
+//                        .stroke(Color.accentColor, lineWidth: 1)
+//                }
+                
                 UserAnnotation()
             }
             .onMapCameraChange(frequency: .onEnd, { mapCameraContext in
@@ -45,21 +57,39 @@ struct MapHome: View {
                     Double(mapCameraContext.camera.centerCoordinate.longitude).rounded(toPlaces: 2) == Double(selection.location.coordinate.longitude).rounded(toPlaces: 2)) {
                     // show popover
                         withAnimation {
-                            navigatedLocation = mapVM.selection
+                            navigatedLocation = selection
                         }
+//                    mapVM.selectTappedCountry(countryName: selection.country)
+//                    withAnimation(.easeOut(duration: 0.5)) {
+//                        animatePoly.toggle()
+//                    }
                 }
                 // clear selection so tap is registered every annotation tap
                 mapVM.selection = nil
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+//                    withAnimation {
+//                        animatePoly.toggle()
+//                    }
+//                    mapVM.tappedCountry = []
+//                }
+                
+                mapVM.setCurrentPosition(mapCameraContext: mapCameraContext)
             })
             .onReceive(mapVM.$selection, perform: { newSelection in
-                if newSelection != nil {
+                if let selection = newSelection {
+                    // eventually remove
+                    mapVM.setupCameraTransition(taggedLocation: selection)
                     moveCamera.toggle()
                 }
             })
 
             .mapCameraKeyframeAnimator(trigger: moveCamera, keyframes: { mapCamera in
                 KeyframeTrack(\MapCamera.centerCoordinate) {
-                    CubicKeyframe(mapVM.selection!.location.coordinate, duration: 0.5)
+                    CubicKeyframe(mapVM.selection!.location.coordinate, duration: mapVM.animationDuration)
+                }
+                KeyframeTrack(\MapCamera.distance) {
+                    CubicKeyframe((mapVM.calculatedCameraHeight * 2) - (mapVM.calculatedCameraHeight * mapVM.animationDuration), duration: mapVM.animationDuration / 2)
+                    CubicKeyframe(mapVM.calculatedCameraHeight, duration: mapVM.animationDuration)
                 }
             })
             
@@ -94,6 +124,9 @@ struct MapHome: View {
             }
             // if show inside view
             LocationModalView(locationDict: photoSelectionVM.locationGroupedImages, navigatedLocation: $navigatedLocation)
+        }
+        .task {
+            mapVM.retrieveCountryPolygons()
         }
         .task(id: photoSelectionVM.placemarkCountryKeys, {
             await mapVM.getLocations(countries: photoSelectionVM.placemarkCountryKeys)

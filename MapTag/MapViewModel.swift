@@ -12,25 +12,32 @@ import MapKit
 @MainActor
 class MapViewModel: ObservableObject {
     @Published var selectedTab = TabViews.mapTab
-    // cameraPostion
-    @Published var mapCameraPosition: MapCameraPosition = .userLocation(fallback: .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: -40.900557, longitude: 174.885971), distance: 20_000_000.0)))
-    @Published var locations: [TaggedLocation] = []
+    @Published var mapCameraPosition: MapCameraPosition = .userLocation(fallback: .region(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: -40.900557, longitude: 174.885971), span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10))))
+    // locations from photo metadata
+    @Published var taggedLocations: [TaggedLocation] = []
+    // user tapped location
     @Published var selection: TaggedLocation?
     
     let goeCoder = CLGeocoder()
+    // camera position updated onEnd of movement
+    var currentMapPoint: MKMapPoint = MKMapPoint()
+    // TODO: only get countries required and add as needed
+    // calculated polygons of each country
+    var countryPolygonDict: [String: [[[CLLocationCoordinate2D]]]] = [:]
     
-    
-    
-    
+    // camera transition info
+    var animationDuration: Double = 0.0
+    var calculatedCameraHeight: Double = 0.0
+
     func getLocations(countries: [String]) async {
         for country in countries {
             if let location = await getCountryLocation(country: country) {
-                self.locations.append(TaggedLocation(country: country, location: location))
+                self.taggedLocations.append(TaggedLocation(country: country, location: location))
             }
         }
     }
     
-    func getCountryLocation(country: String) async -> CLLocation? {
+    private func getCountryLocation(country: String) async -> CLLocation? {
         var loc: CLLocation? = nil
         do {
             let places = try await goeCoder.geocodeAddressString(country)
@@ -43,44 +50,105 @@ class MapViewModel: ObservableObject {
         return loc
     }
     
-//    var distance: Double {
-//        mapChangeContext
-//    }
+    func setCurrentPosition(mapCameraContext: MapCameraUpdateContext) {
+        currentMapPoint = MKMapPoint(mapCameraContext.region.center)
+    }
     
-//    func getAnimationTime(taggedLocationCoordinate: CLLocationCoordinate2D) -> CGFloat {
-//        if let distance = getDistance(taggedLocationCoordinate: taggedLocationCoordinate) {
-//            // TODO: calc the time
-//            print("Distance is \(distance)")
+    
+    func retrieveCountryPolygons() {
+        var dict = [String: [[[CLLocationCoordinate2D]]]]()
+        let featureColl = decodeGeoJSON()
+        
+        if let fc = featureColl {
+            fc.features.forEach { countryBoundry in
+                let name = countryBoundry.countryName
+                let coordinates = countryBoundry.coordinates
+                dict[name] = coordinates
+            }
+        }
+        countryPolygonDict = dict
+    }
+    
+
+    private func decodeGeoJSON() -> FeatureCollection? {
+        guard let geoFile = Bundle.main.url(forResource: "countries", withExtension: "geojson") else { return nil}
+        do {
+            let data = try Data(contentsOf: geoFile)
+             return try JSONDecoder().decode(FeatureCollection.self, from: data)
+        } catch {
+            print("Error dealing with geoJSON")
+        }
+      return nil
+    }
+    
+
+    func setupCameraTransition(taggedLocation: TaggedLocation) {
+        let mapPoint: MKMapPoint = MKMapPoint(taggedLocation.location.coordinate)
+        let distance = currentMapPoint.distance(to: mapPoint)
+        
+        // animation time
+        switch distance {
+//        case let x where x < 100:
+//            duration = 0.01
+////        case let x where x < 1_000:
+////            duration = 0.2
+////        case let x where x < 10_000:
+////            duration = 0.4
+////        case let x where x < 100_000:
+////            duration = 0.6
+//        case let x where x < 1_000_000:
+//            duration = 0.8
+        default:
+            animationDuration = 1.0
+        }
+        
+        // altitude
+        var minLat = Double.greatestFiniteMagnitude
+        var minLong = Double.greatestFiniteMagnitude
+        var maxLat = 0.0
+        var maxLong = 0.0
+        
+        if let coordArr = countryPolygonDict[taggedLocation.country] {
+            coordArr.forEach({ arr in
+                if let coord = arr.first {
+                    coord.forEach { clCoord in
+                        minLat = min(clCoord.latitude, minLat)
+                        minLong = min(clCoord.longitude, minLong)
+                        
+                        maxLat = max(clCoord.latitude, maxLat)
+                        maxLong = min(clCoord.longitude, maxLong)
+                    }
+                }
+            })
+        }
+        let longSpan = abs(maxLong - minLong)
+        let latSpan = abs(maxLat - minLat)
+        
+        let longMeters = longSpan * 111_000 * cos(minLong * .pi / 180)
+        let latMeters = latSpan * 111_000
+        
+        let rect = MKMapRect(origin: mapPoint, size: MKMapSize(width: longMeters, height: latMeters))
+        calculatedCameraHeight = rect.height
+        print("dist: \(distance)")
+        print("ani: \(animationDuration)")
+    }
+    
+    
+    // MARK: map polygons
+        
+    //    @Published var tappedCountry: [MKPolygon] = []
+//    var countrySpan: MKCoordinateSp
+    
+//    func selectTappedCountry(countryName: String) {
+//        if let coordArr = countryPolygonDict[countryName] {
+//            countryPolygonDict[countryName]?.forEach({ arr in
+//                if let coord = arr.first {
+//                    tappedCountry.append(MKPolygon(coordinates: coord, count: coord.count))
+//                }
+//            })
 //        }
-//        return 1.0
+//
 //    }
-    
-//    func getDistance(taggedLocationCoordinate: CLLocationCoordinate2D) -> CLLocationDistance? {
-//        let mapPoint: MKMapPoint = MKMapPoint(taggedLocationCoordinate)
-//        if let camera = mapCameraPosition.camera {
-//            let cameraPoint = MKMapPoint(camera.centerCoordinate)
-//            return cameraPoint.distance(to: mapPoint)
-//        } else if let region = mapCameraPosition.region {
-//            let regionPoint = MKMapPoint(region.center)
-//            return regionPoint.distance(to: mapPoint)
-//        } else if let rect = mapCameraPosition.rect { // user positioned point
-//            let rectPoint = rect.origin
-//            return rectPoint.distance(to: mapPoint)
-//        }
-//        return nil
-//    }
-    
-    
-    
-//    @Published var selectedLocation: TaggedLocation? = nil {
-//        didSet {
-//            withAnimation {
-//                showLocationPin.toggle()
-//            }
-//        }
-//    }
-//    
-//    @Published var showLocationPin: Bool = false
     
 }
 

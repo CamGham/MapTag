@@ -10,6 +10,8 @@
 		420940CA2BBBDF6A004D9662 /* PhotoSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420940C92BBBDF6A004D9662 /* PhotoSelectionViewModel.swift */; };
 		420940CC2BBBE8F2004D9662 /* MutableProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420940CB2BBBE8F2004D9662 /* MutableProgress.swift */; };
 		423DCA132BBD40DA00AF21BB /* ProfileImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423DCA122BBD40DA00AF21BB /* ProfileImageContainer.swift */; };
+		4253BE9C2BC2233A00BD4E58 /* countries.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 4253BE9B2BC2233A00BD4E58 /* countries.geojson */; };
+		4253BE9E2BC23A6600BD4E58 /* CountryBoundry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4253BE9D2BC23A6600BD4E58 /* CountryBoundry.swift */; };
 		4288961C2BBFD3D400884287 /* ImageContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4288961B2BBFD3D400884287 /* ImageContainerView.swift */; };
 		4288961E2BBFF26E00884287 /* FullscreenImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4288961D2BBFF26E00884287 /* FullscreenImage.swift */; };
 		42AD05092BBA333A00F08D0B /* MapTagApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD05082BBA333A00F08D0B /* MapTagApp.swift */; };
@@ -51,6 +53,8 @@
 		420940C92BBBDF6A004D9662 /* PhotoSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionViewModel.swift; sourceTree = "<group>"; };
 		420940CB2BBBE8F2004D9662 /* MutableProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableProgress.swift; sourceTree = "<group>"; };
 		423DCA122BBD40DA00AF21BB /* ProfileImageContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageContainer.swift; sourceTree = "<group>"; };
+		4253BE9B2BC2233A00BD4E58 /* countries.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = countries.geojson; path = ../../../../../Downloads/countries.geojson; sourceTree = "<group>"; };
+		4253BE9D2BC23A6600BD4E58 /* CountryBoundry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryBoundry.swift; sourceTree = "<group>"; };
 		4288961B2BBFD3D400884287 /* ImageContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainerView.swift; sourceTree = "<group>"; };
 		4288961D2BBFF26E00884287 /* FullscreenImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenImage.swift; sourceTree = "<group>"; };
 		42AD05052BBA333900F08D0B /* MapTag.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapTag.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,12 +126,14 @@
 		42AD05072BBA333900F08D0B /* MapTag */ = {
 			isa = PBXGroup;
 			children = (
+				42EE6FC82BC2225900E7313A /* Resources */,
 				42AD05082BBA333A00F08D0B /* MapTagApp.swift */,
 				42AD050A2BBA333A00F08D0B /* MapTagTabView.swift */,
 				42AD05322BBA471E00F08D0B /* MapHome.swift */,
 				42B1431F2BBE93BC001500DA /* MapAnnotation.swift */,
 				42AD053C2BBAB0C900F08D0B /* MapViewModel.swift */,
 				42EE6FC62BC164A800E7313A /* LocationModalView.swift */,
+				4253BE9D2BC23A6600BD4E58 /* CountryBoundry.swift */,
 				42AD05362BBA717200F08D0B /* CountryListView.swift */,
 				42AD05382BBA792B00F08D0B /* CountriesViewModel.swift */,
 				42AD053A2BBAA48500F08D0B /* CountryDetailView.swift */,
@@ -167,6 +173,14 @@
 				42AD05252BBA333B00F08D0B /* MapTagUITestsLaunchTests.swift */,
 			);
 			path = MapTagUITests;
+			sourceTree = "<group>";
+		};
+		42EE6FC82BC2225900E7313A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4253BE9B2BC2233A00BD4E58 /* countries.geojson */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,6 +271,8 @@
 				Base,
 			);
 			mainGroup = 42AD04FC2BBA333900F08D0B;
+			packageReferences = (
+			);
 			productRefGroup = 42AD05062BBA333900F08D0B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -273,6 +289,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4253BE9C2BC2233A00BD4E58 /* countries.geojson in Resources */,
 				42AD05102BBA333B00F08D0B /* Preview Assets.xcassets in Resources */,
 				42AD050D2BBA333B00F08D0B /* Assets.xcassets in Resources */,
 			);
@@ -309,6 +326,7 @@
 				420940CC2BBBE8F2004D9662 /* MutableProgress.swift in Sources */,
 				42EE6FC52BC162D400E7313A /* DoubleExtensions.swift in Sources */,
 				42AD050B2BBA333A00F08D0B /* MapTagTabView.swift in Sources */,
+				4253BE9E2BC23A6600BD4E58 /* CountryBoundry.swift in Sources */,
 				4288961E2BBFF26E00884287 /* FullscreenImage.swift in Sources */,
 				42AD05392BBA792B00F08D0B /* CountriesViewModel.swift in Sources */,
 				42AD05092BBA333A00F08D0B /* MapTagApp.swift in Sources */,
