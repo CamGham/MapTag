@@ -25,6 +25,13 @@ struct MapHome: View {
     // TODO: let user change the interest filters
     var pointsOfInterest: [MKPointOfInterestCategory] = [.airport,.amusementPark,.aquarium,.bakery,.beach,.brewery, .cafe,.campground,.carRental,.foodMarket,.gasStation,.hotel,.marina,.museum,.nationalPark,.nightlife,.park,.parking,.publicTransport,.restaurant,.stadium,.store,.winery,.zoo]
     
+    
+    @State var showLocationDetails = false
+    @State var startExploring = false
+    
+    @State var sheetNavigationPath = NavigationPath()
+    @State var sheetSize: PresentationDetent = PresentationDetent.medium
+    
     var body: some View {
         ZStack {
             
@@ -35,16 +42,14 @@ struct MapHome: View {
             Map(position: $mapVM.mapCameraPosition, interactionModes: [.pan, .zoom], selection: $mapVM.selection) {
                 ForEach(mapVM.taggedLocations, id: \.self) { location in
                     Annotation(location.country, coordinate: location.location.coordinate) {
-                        MapAnnotation(location: location)
-                            .tag(location)
+                        MapAnnotation(location: location, navigatedLocation: $navigatedLocation, showLocationDetails: $showLocationDetails, startExploring: $startExploring, navPath: $sheetNavigationPath, sheetSize: $sheetSize)
+                            
+                            
                     }
+                    .tag(location)
+                    .annotationTitles(navigatedLocation != nil ? .hidden : .visible)
                 }
-//                ForEach(mapVM.tappedCountry, id: \.self) { poly in
-//                    MapPolygon(poly)
-//                        .foregroundStyle(.white.opacity(animatePoly ? 1.0 : 0.3))
-//                        .stroke(Color.accentColor, lineWidth: 1)
-//                }
-                
+
                 UserAnnotation()
             }
             .mapStyle(.hybrid(elevation: .realistic,
@@ -64,9 +69,14 @@ struct MapHome: View {
                         withAnimation {
                             navigatedLocation = selection
                         }
+                } else {
+                    withAnimation {
+                        navigatedLocation = nil
+                    }
                 }
                 // clear selection so tap is registered every annotation tap
                 mapVM.selection = nil
+                
                 mapVM.setCurrentPosition(mapCameraContext: mapCameraContext)
             })
             .onReceive(mapVM.$selection, perform: { newSelection in
@@ -81,7 +91,6 @@ struct MapHome: View {
                     CubicKeyframe(mapVM.selection!.location.coordinate, duration: mapVM.animationDuration)
                 }
                 KeyframeTrack(\MapCamera.distance) {
-                    CubicKeyframe((mapVM.calculatedCameraHeight * 2) - (mapVM.calculatedCameraHeight * mapVM.animationDuration), duration: mapVM.animationDuration / 2)
                     CubicKeyframe(mapVM.calculatedCameraHeight, duration: mapVM.animationDuration)
                 }
             })
@@ -108,7 +117,15 @@ struct MapHome: View {
                 Spacer()
             }
             // if show inside view
-            LocationModalView(locationDict: photoSelectionVM.locationGroupedImages, navigatedLocation: $navigatedLocation)
+//            LocationModalView(locationDict: photoSelectionVM.locationGroupedImages, navigatedLocation: $navigatedLocation)
+//            if navigatedLocation != nil {
+//                Rectangle()
+//                    .ignoresSafeArea()
+//                    .scaledToFill()
+//                    .foregroundStyle(.ultraThinMaterial)
+//                    .zIndex(1.1)
+//                    
+//            }
         }
         .task {
             mapVM.retrieveCountryPolygons()
@@ -119,13 +136,17 @@ struct MapHome: View {
         .fullScreenCover(isPresented: $openProfileSheet, content: {
             ProfileView()
         })
+        .sheet(isPresented: $showLocationDetails, content: {
+            LocationSheetView(locationDict: photoSelectionVM.locationGroupedImages, location: $navigatedLocation, navPath: $sheetNavigationPath)
+                .presentationDetents([.medium, .large], selection: $sheetSize)
+        })
     }
 }
 
 #Preview {
 //    let loc = TaggedLocation(country: "New Zealand", location: CLLocation(latitude: -40.900557, longitude: 174.885971))
     
-    MapHome(openProfileSheet: false)
+    MapHome()
         .environmentObject(MapViewModel())
         .environmentObject(PhotoSelectionViewModel())
 }

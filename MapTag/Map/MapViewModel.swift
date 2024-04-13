@@ -88,16 +88,16 @@ class MapViewModel: ObservableObject {
         
         // animation time
         switch distance {
-//        case let x where x < 100:
-//            duration = 0.01
-////        case let x where x < 1_000:
-////            duration = 0.2
-////        case let x where x < 10_000:
-////            duration = 0.4
-////        case let x where x < 100_000:
-////            duration = 0.6
-//        case let x where x < 1_000_000:
-//            duration = 0.8
+        case let x where x < 100:
+            animationDuration = 0.01
+        case let x where x < 1_000:
+            animationDuration = 0.1
+        case let x where x < 10_000:
+            animationDuration = 0.2
+        case let x where x < 500_000:
+            animationDuration = 0.4
+        case let x where x < 1_000_000:
+            animationDuration = 0.8
         default:
             animationDuration = 1.0
         }
