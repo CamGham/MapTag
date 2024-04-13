@@ -87,164 +87,80 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F0A0F79B-A01B-4B58-ABBF-86D96B57D430"
+            uuid = "1902A9FC-4A07-4F28-B7C0-C98C756B94E0"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MapTag/MapTagCamera.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "getAnimationTime(taggedLocationCoordinate:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "241B6E46-065F-4B0A-8257-458580536C40"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MapTag/MapTagCamera.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "getDistance(taggedLocationCoordinate:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4064E180-B793-4F27-83A4-DAB1DBC0AA2F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MapTag/MapTagCamera.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "getDistance(taggedLocationCoordinate:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "16F4F022-6BA7-4A9C-AE5F-E2889EE6D8D6"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MapTag/MapTagCamera.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "getDistance(taggedLocationCoordinate:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D279A62E-0CF3-4663-88F7-7C0E62C6DD7D"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MapTag/MapTagCamera.swift"
+            filePath = "MapTag/MapViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "20"
-            endingLineNumber = "20"
-            landmarkName = "getLocations(countries:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "F0A0F79B-A01B-4B58-ABBF-86D96B57D430 - 13dc32644c9c6c91"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for MapTag.MapTagCamera.getLocations(countries: Swift.Array&lt;Swift.String&gt;) async -&gt; ()"
-                  moduleName = "MapTag"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/MapTagCamera.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20">
-               </Location>
-               <Location
-                  uuid = "F0A0F79B-A01B-4B58-ABBF-86D96B57D430 - 13dc32644c9c6c91"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for MapTag.MapTagCamera.getLocations(countries: Swift.Array&lt;Swift.String&gt;) async -&gt; ()"
-                  moduleName = "MapTag"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/MapTagCamera.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20">
-               </Location>
-               <Location
-                  uuid = "F0A0F79B-A01B-4B58-ABBF-86D96B57D430 - 69aaad77eeba9093"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MapTag.MapTagCamera.getLocations(countries: Swift.Array&lt;Swift.String&gt;) async -&gt; ()"
-                  moduleName = "MapTag"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/MapTagCamera.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20">
-               </Location>
-               <Location
-                  uuid = "F0A0F79B-A01B-4B58-ABBF-86D96B57D430 - 69aaad77eeba9093"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MapTag.MapTagCamera.getLocations(countries: Swift.Array&lt;Swift.String&gt;) async -&gt; ()"
-                  moduleName = "MapTag"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/MapTagCamera.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E7C6E05C-AD5C-4E4A-87C1-3A9527F50DC4"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MapTag/MapTagCamera.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
-            landmarkName = "getLocations(countries:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "E7C6E05C-AD5C-4E4A-87C1-3A9527F50DC4 - 13dc32644c9c6c70"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for MapTag.MapTagCamera.getLocations(countries: Swift.Array&lt;Swift.String&gt;) async -&gt; ()"
-                  moduleName = "MapTag"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/MapTagCamera.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "21"
-                  endingLineNumber = "21">
-               </Location>
-               <Location
-                  uuid = "E7C6E05C-AD5C-4E4A-87C1-3A9527F50DC4 - fc002dadd608c578"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for MapTag.MapTagCamera.getLocations(countries: Swift.Array&lt;Swift.String&gt;) async -&gt; ()"
-                  moduleName = "MapTag"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/MapTagCamera.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "21"
-                  endingLineNumber = "21">
-               </Location>
-               <Location
-                  uuid = "E7C6E05C-AD5C-4E4A-87C1-3A9527F50DC4 - 69aaad77eeba9072"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MapTag.MapTagCamera.getLocations(countries: Swift.Array&lt;Swift.String&gt;) async -&gt; ()"
-                  moduleName = "MapTag"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/MapTagCamera.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "21"
-                  endingLineNumber = "21">
-               </Location>
-               <Location
-                  uuid = "E7C6E05C-AD5C-4E4A-87C1-3A9527F50DC4 - 69aaad77eeba9072"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for MapTag.MapTagCamera.getLocations(countries: Swift.Array&lt;Swift.String&gt;) async -&gt; ()"
-                  moduleName = "MapTag"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/MapTagCamera.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "21"
-                  endingLineNumber = "21">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A71877FA-C517-4F8C-817B-11AD5DF67CEF"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MapTag/MapTagCamera.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "22"
-            endingLineNumber = "22"
-            landmarkName = "getLocations(countries:)"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
+            landmarkName = "retrieveCountryPolygons()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

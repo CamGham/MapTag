@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MapTagTabView: View {
-    @StateObject var mapTagCamera = MapTagCamera()
+    @StateObject var mapTagCamera = MapViewModel()
     @StateObject var photoSelectionVM = PhotoSelectionViewModel()
     
     var body: some View {

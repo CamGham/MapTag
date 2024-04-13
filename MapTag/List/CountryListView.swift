@@ -9,13 +9,13 @@ import SwiftUI
 import MapKit
 
 struct CountryListView: View {
-    @EnvironmentObject var mapTagCamera: MapTagCamera
+    @EnvironmentObject var mapTagCamera: MapViewModel
     @EnvironmentObject var photoSelectionVM: PhotoSelectionViewModel
     @StateObject var countriesVM = CountriesViewModel()
     @State var navPath = NavigationPath()
     
     private func navToCountryPos(country: Country) {
-        mapTagCamera.position = .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: country.lattitude, longitude: country.longitude), distance: 20_000_000.0))
+        mapTagCamera.mapCameraPosition = .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: country.lattitude, longitude: country.longitude), distance: 20_000_000.0))
         mapTagCamera.selectedTab = .mapTab
     }
     
@@ -53,7 +53,7 @@ struct CountryListView: View {
 
 #Preview {
     CountryListView()
-        .environmentObject(MapTagCamera())
+        .environmentObject(MapViewModel())
 }
 
 struct CountryRowView: View {
