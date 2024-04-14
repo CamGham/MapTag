@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LocationModalView: View {
+    @EnvironmentObject var photoVM: PhotoSelectionViewModel
     @State var fullScreen = false
     var locationDict: [String: [MapTagImage]]
     var title: String {
@@ -37,7 +38,7 @@ struct LocationModalView: View {
                         })
                         .navigationDestination(for: TaggedLocation.self) { location in
                             
-                            ImageContainerView(images: locationDict[location.country] ?? [], title: location.country)
+                            ImageContainerView(title: location.country, images: locationDict[location.country] ?? [], dateGroupedImages: photoVM.dateGroupedImages(images: locationDict[location.country] ?? []))
                                 .onAppear(perform: {
                                     withAnimation(.default.delay(0.5)) {
                                         fullScreen.toggle()

@@ -38,21 +38,28 @@ class PhotoSelectionViewModel: ObservableObject {
         retrievedImages.forEach { taggedImage in
             guard let metaData = taggedImage.phAsset, let location = metaData.location else {
                 // TODO: remove after debug
+                var copyImage = taggedImage
+                copyImage.creationDate = Date()
                 if tempDict.keys.contains("New Zealand") {
-                    tempDict["New Zealand"]?.append(taggedImage)
+                    tempDict["New Zealand"]?.append(copyImage)
                 } else {
-                    tempDict["New Zealand"] = [taggedImage]
+                    tempDict["New Zealand"] = [copyImage]
                 }
                 return
             }
             goeCoder.reverseGeocodeLocation(location) { optionalPlacemarks, errror in
                 guard let placemarks = optionalPlacemarks, let placemark = placemarks.first, let country = placemark.country else { return }
+                var mapTagCopy = taggedImage
                 
-                // TODO: should keep placemark object?
+                mapTagCopy.placemark = placemark
+                if let date = metaData.creationDate {
+                    mapTagCopy.creationDate = date
+                }
+                
                 if tempDict.keys.contains(country) {
-                    tempDict[country]?.append(taggedImage)
+                    tempDict[country]?.append(mapTagCopy)
                 } else {
-                    tempDict[country] = [taggedImage]
+                    tempDict[country] = [mapTagCopy]
                 }
                 // TODO: handle more than 1 location
                 
@@ -67,10 +74,75 @@ class PhotoSelectionViewModel: ObservableObject {
     
     func getImageOriginIndex(mapTagImage: MapTagImage) -> Int? {
         retrievedImages.firstIndex { image in
-            image == mapTagImage
+            image.id == mapTagImage.id
         }
     }
     
+    
+    // TODO: conver to current timezone, but proved true image timezone as well?
+    func dateGroupedImages(images: [MapTagImage]) -> [String: [MapTagImage]] {
+        var tempDict: [String: [MapTagImage]] = [:]
+        images.forEach { mapTagImage in
+            if let date = mapTagImage.creationDate {
+                let formattedDateString = date.formatted(date: .numeric, time: .omitted)
+                if tempDict.keys.contains(formattedDateString) {
+                    tempDict[formattedDateString]?.append(mapTagImage)
+                } else {
+                    tempDict[formattedDateString] = [mapTagImage]
+                }
+            }
+        }
+        return tempDict
+    }
+    
+    func dateGroupedImages() -> [String: [MapTagImage]] {
+        var tempDict: [String: [MapTagImage]] = [:]
+        retrievedImages.forEach { mapTagImage in
+            if let date = mapTagImage.creationDate {
+                let formattedDateString = date.formatted(date: .numeric, time: .omitted)
+                if tempDict.keys.contains(formattedDateString) {
+                    tempDict[formattedDateString]?.append(mapTagImage)
+                } else {
+                    tempDict[formattedDateString] = [mapTagImage]
+                }
+            }
+        }
+        return tempDict
+    }
+    
+    func monthGroupedImages(images: [MapTagImage]) -> [Int: [MapTagImage]] {
+        var tempDict: [Int: [MapTagImage]] = [:]
+        images.forEach { mapTagImage in
+            if let date = mapTagImage.creationDate {
+                let calender = Calendar.current
+                if let month = calender.dateComponents([.month], from: date).month {
+                    if tempDict.keys.contains(month) {
+                        tempDict[month]?.append(mapTagImage)
+                    } else {
+                        tempDict[month] = [mapTagImage]
+                    }
+                }
+            }
+        }
+        return tempDict
+    }
+    
+    func monthGroupedImages() -> [Int: [MapTagImage]] {
+        var tempDict: [Int: [MapTagImage]] = [:]
+        retrievedImages.forEach { mapTagImage in
+            if let date = mapTagImage.creationDate {
+                let calender = Calendar.current
+                if let month = calender.dateComponents([.month], from: date).month {
+                    if tempDict.keys.contains(month) {
+                        tempDict[month]?.append(mapTagImage)
+                    } else {
+                        tempDict[month] = [mapTagImage]
+                    }
+                }
+            }
+        }
+        return tempDict
+    }
     
     
     private func loadImages(selectedImages: [PhotosPickerItem]) -> Progress {
@@ -141,6 +213,9 @@ struct MapTagImage: Transferable, Identifiable, Equatable {
     let phAsset: PHAsset?
     var showcased = false
     
+    var placemark: CLPlacemark?
+    var creationDate: Date?
+    
     static var transferRepresentation: some TransferRepresentation {
         DataRepresentation(importedContentType: .image) { data in
             #if canImport(UIKit)
@@ -155,8 +230,16 @@ struct MapTagImage: Transferable, Identifiable, Equatable {
         }
     }
     
+    func getImageCoords() -> CLLocationCoordinate2D? {
+        //TODO: REMOVE - DEBUG ONLY
+        return CLLocationCoordinate2D(latitude: -40.900557, longitude: 174.885971)
+//        return self.placemark?.location?.coordinate
+    }
+    
     static let testData: MapTagImage = MapTagImage(image: Image("FoxGlacier"), phAsset: nil)
 }
+
+
 
 enum TransferError: Error {
     case importFailed
@@ -165,3 +248,5 @@ enum TransferError: Error {
 struct CountryKey: Hashable {
     var countryName: String
 }
+
+
