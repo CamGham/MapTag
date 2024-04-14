@@ -10,6 +10,7 @@
 		420940CA2BBBDF6A004D9662 /* PhotoSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420940C92BBBDF6A004D9662 /* PhotoSelectionViewModel.swift */; };
 		420940CC2BBBE8F2004D9662 /* MutableProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420940CB2BBBE8F2004D9662 /* MutableProgress.swift */; };
 		4214C3D22BCB483E000EC059 /* LocationSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4214C3D12BCB483E000EC059 /* LocationSheetView.swift */; };
+		4214C3D42BCB5458000EC059 /* CountryMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4214C3D32BCB5458000EC059 /* CountryMap.swift */; };
 		423DCA132BBD40DA00AF21BB /* ProfileImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423DCA122BBD40DA00AF21BB /* ProfileImageContainer.swift */; };
 		4253BE9C2BC2233A00BD4E58 /* countries.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 4253BE9B2BC2233A00BD4E58 /* countries.geojson */; };
 		4253BE9E2BC23A6600BD4E58 /* CountryBoundry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4253BE9D2BC23A6600BD4E58 /* CountryBoundry.swift */; };
@@ -54,6 +55,7 @@
 		420940C92BBBDF6A004D9662 /* PhotoSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionViewModel.swift; sourceTree = "<group>"; };
 		420940CB2BBBE8F2004D9662 /* MutableProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableProgress.swift; sourceTree = "<group>"; };
 		4214C3D12BCB483E000EC059 /* LocationSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSheetView.swift; sourceTree = "<group>"; };
+		4214C3D32BCB5458000EC059 /* CountryMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryMap.swift; sourceTree = "<group>"; };
 		423DCA122BBD40DA00AF21BB /* ProfileImageContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageContainer.swift; sourceTree = "<group>"; };
 		4253BE9B2BC2233A00BD4E58 /* countries.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = countries.geojson; path = ../../../../../Downloads/countries.geojson; sourceTree = "<group>"; };
 		4253BE9D2BC23A6600BD4E58 /* CountryBoundry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryBoundry.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				42EE6FC62BC164A800E7313A /* LocationModalView.swift */,
 				4253BE9D2BC23A6600BD4E58 /* CountryBoundry.swift */,
 				4214C3D12BCB483E000EC059 /* LocationSheetView.swift */,
+				4214C3D32BCB5458000EC059 /* CountryMap.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 			files = (
 				42AD053D2BBAB0C900F08D0B /* MapViewModel.swift in Sources */,
 				42AD053B2BBAA48500F08D0B /* CountryDetailView.swift in Sources */,
+				4214C3D42BCB5458000EC059 /* CountryMap.swift in Sources */,
 				42AD05372BBA717200F08D0B /* CountryListView.swift in Sources */,
 				42EE6FC72BC164A800E7313A /* LocationModalView.swift in Sources */,
 				420940CA2BBBDF6A004D9662 /* PhotoSelectionViewModel.swift in Sources */,

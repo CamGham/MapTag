@@ -20,7 +20,7 @@ struct MapAnnotation: View {
     //    @Binding var cameraPosition: MapCameraPosition
     @State var animate = false
     var posOffset: CGFloat {
-        animate ? 44 : 0
+        animate ? 54 : 0
     }
     var body: some View {
         ZStack {
@@ -45,16 +45,16 @@ struct MapAnnotation: View {
                     Button {
                         startExploring.toggle()
                     } label: {
-                        PopupIcon(title: "Explore", iconName: "figure.walk.circle.fill", iconColor: .orange, startingDegree: 260.0)
+                        PopupIcon(title: "Explore", iconName: "figure.walk.circle.fill", iconColor: .orange, startingDegree: 300.0)
                     }
-                    .offset(x: animate ? -44 : 0, y: animate ? -44 : 0)
+                    .offset(x: -posOffset, y: -posOffset)
                     
                     Button(action: {
                         navPath.append(location)
                         sheetSize = .large
                         showLocationDetails.toggle()
                     }, label: {
-                        PopupIcon(title: "Photos", iconName: "photo.circle.fill", iconColor: .purple, startingDegree: 1.0)
+                        PopupIcon(title: "Photos", iconName: "photo.circle.fill", iconColor: .purple, startingDegree: 310.0)
                         
                     })
                     .offset(x: posOffset, y: -posOffset)
@@ -65,7 +65,7 @@ struct MapAnnotation: View {
                         sheetSize = .medium
                         showLocationDetails.toggle()
                     }, label: {
-                        PopupIcon(title: "Info", iconName: "info.circle.fill", iconColor: .mint, startingDegree: 100.0)
+                        PopupIcon(title: "Info", iconName: "info.circle.fill", iconColor: .mint, startingDegree: 322.0)
                     })
                     .offset(x: posOffset, y: posOffset)
                 }

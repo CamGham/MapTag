@@ -25,31 +25,28 @@ struct MapHome: View {
     // TODO: let user change the interest filters
     var pointsOfInterest: [MKPointOfInterestCategory] = [.airport,.amusementPark,.aquarium,.bakery,.beach,.brewery, .cafe,.campground,.carRental,.foodMarket,.gasStation,.hotel,.marina,.museum,.nationalPark,.nightlife,.park,.parking,.publicTransport,.restaurant,.stadium,.store,.winery,.zoo]
     
-    
     @State var showLocationDetails = false
     @State var startExploring = false
     
     @State var sheetNavigationPath = NavigationPath()
     @State var sheetSize: PresentationDetent = PresentationDetent.medium
     
+
     var body: some View {
         ZStack {
             
             // TODO:
             // map reader to find clicks on map -> find clicked country
             // use ploygon to highlight country
-            
             Map(position: $mapVM.mapCameraPosition, interactionModes: [.pan, .zoom], selection: $mapVM.selection) {
                 ForEach(mapVM.taggedLocations, id: \.self) { location in
                     Annotation(location.country, coordinate: location.location.coordinate) {
                         MapAnnotation(location: location, navigatedLocation: $navigatedLocation, showLocationDetails: $showLocationDetails, startExploring: $startExploring, navPath: $sheetNavigationPath, sheetSize: $sheetSize)
-                            
-                            
                     }
                     .tag(location)
                     .annotationTitles(navigatedLocation != nil ? .hidden : .visible)
                 }
-
+                
                 UserAnnotation()
             }
             .mapStyle(.hybrid(elevation: .realistic,
@@ -116,6 +113,12 @@ struct MapHome: View {
                 }
                 Spacer()
             }
+            
+            
+            if startExploring {
+                CountryMap(startExploring: $startExploring , location: navigatedLocation, mapRegion:  mapVM.mapRegion, calculatedCameraHeight: mapVM.calculatedCameraHeight)
+            }
+            
             // if show inside view
 //            LocationModalView(locationDict: photoSelectionVM.locationGroupedImages, navigatedLocation: $navigatedLocation)
 //            if navigatedLocation != nil {
