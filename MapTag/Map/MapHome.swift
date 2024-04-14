@@ -202,6 +202,7 @@ struct MapHome: View {
                     }
                 })
                 .zIndex(1.1)
+                .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .scale.combined(with: .opacity)))
                 
             }
             
