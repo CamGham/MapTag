@@ -18,10 +18,7 @@ struct MapAnnotation: View {
     
     //    @State var showPopover = false
     //    @Binding var cameraPosition: MapCameraPosition
-    @State var animate = false
-    var posOffset: CGFloat {
-        animate ? 54 : 0
-    }
+    
     var body: some View {
         ZStack {
             Image(systemName: "mappin")
@@ -32,57 +29,7 @@ struct MapAnnotation: View {
             
             
             
-            if let navLoc = navigatedLocation, navLoc == location {
-                
-                Group {
-                    Text(navLoc.country)
-                        .foregroundStyle(.white)
-                        .font(.largeTitle)
-                        .fontWeight(.heavy)
-                        .offset(y: -140)
-                        .fixedSize()
-
-                    Button {
-                        startExploring.toggle()
-                    } label: {
-                        PopupIcon(title: "Explore", iconName: "figure.walk.circle.fill", iconColor: .orange, startingDegree: 300.0)
-                    }
-                    .offset(x: -posOffset, y: -posOffset)
-                    
-                    Button(action: {
-                        navPath.append(location)
-                        sheetSize = .large
-                        showLocationDetails.toggle()
-                    }, label: {
-                        PopupIcon(title: "Photos", iconName: "photo.circle.fill", iconColor: .purple, startingDegree: 310.0)
-                        
-                    })
-                    .offset(x: posOffset, y: -posOffset)
-                    
-                    
-                    Button(action: {
-                        navPath.removeLast(navPath.count)
-                        sheetSize = .medium
-                        showLocationDetails.toggle()
-                    }, label: {
-                        PopupIcon(title: "Info", iconName: "info.circle.fill", iconColor: .mint, startingDegree: 322.0)
-                    })
-                    .offset(x: posOffset, y: posOffset)
-                }
-                .scaleEffect(animate ? 1 : 0)
-                .opacity(animate ? 1 : 0)
-                .onAppear(perform: {
-                    withAnimation(.easeInOut(duration: 0.8)){
-                        animate.toggle()
-                    }
-                })
-                .onDisappear(perform: {
-                    withAnimation(.easeInOut(duration: 0.8)){
-                        animate.toggle()
-                    }
-                })
-                //                    }
-            }
+            
             
         }
         

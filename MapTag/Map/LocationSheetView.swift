@@ -6,24 +6,30 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct LocationSheetView: View {
     var locationDict: [String: [MapTagImage]]
     @Binding var location: TaggedLocation?
     @Binding var navPath: NavigationPath
     var body: some View {
-        NavigationStack(path: $navPath) {
-            ScrollView {
-                Text("details here")
+        if let location = location {
+            NavigationStack(path: $navPath) {
+                Form {
+                   
+                    ProfileImageContainer(hashableNavigation: location, headerTitle: "Your Photos", images: locationDict[location.country] ?? [])
+                }
+                .navigationTitle(location.country)
+                .navigationDestination(for: TaggedLocation.self) { location in
+                    ImageContainerView(images: locationDict[location.country] ?? [], title: location.country)
+                }
             }
-            .navigationTitle(location?.country ?? "Location")
-            .navigationDestination(for: TaggedLocation.self) { location in
-                ImageContainerView(images: locationDict[location.country] ?? [], title: location.country)
-            }
+           
         }
     }
 }
 
-//#Preview {
-//    LocationSheetView()
-//}
+
+#Preview {
+    LocationSheetView(locationDict: [:], location: .constant(TaggedLocation(country: "New Zealand", location: CLLocation(latitude: -40.900557, longitude: 174.885971))), navPath: .constant(NavigationPath()))
+}

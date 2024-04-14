@@ -31,6 +31,18 @@ struct MapHome: View {
     @State var sheetNavigationPath = NavigationPath()
     @State var sheetSize: PresentationDetent = PresentationDetent.medium
     
+    var userInteractions: MapInteractionModes {
+        if navigatedLocation == nil {
+            return [.pan, .zoom]
+        } else {
+            return []
+        }
+    }
+    
+    @State var animate = false
+    var posOffset: CGFloat {
+        animate ? 54 : 0
+    }
 
     var body: some View {
         ZStack {
@@ -38,10 +50,12 @@ struct MapHome: View {
             // TODO:
             // map reader to find clicks on map -> find clicked country
             // use ploygon to highlight country
-            Map(position: $mapVM.mapCameraPosition, interactionModes: [.pan, .zoom], selection: $mapVM.selection) {
+            Map(position: $mapVM.mapCameraPosition, interactionModes: userInteractions, selection: $mapVM.selection) {
                 ForEach(mapVM.taggedLocations, id: \.self) { location in
                     Annotation(location.country, coordinate: location.location.coordinate) {
                         MapAnnotation(location: location, navigatedLocation: $navigatedLocation, showLocationDetails: $showLocationDetails, startExploring: $startExploring, navPath: $sheetNavigationPath, sheetSize: $sheetSize)
+                            .selectionDisabled(navigatedLocation == location)
+                            
                     }
                     .tag(location)
                     .annotationTitles(navigatedLocation != nil ? .hidden : .visible)
@@ -49,6 +63,7 @@ struct MapHome: View {
                 
                 UserAnnotation()
             }
+            .disabled(navigatedLocation != nil)
             .mapStyle(.hybrid(elevation: .realistic,
                               pointsOfInterest: PointOfInterestCategories.including(pointsOfInterest),
                               showsTraffic: false))
@@ -69,6 +84,7 @@ struct MapHome: View {
                 } else {
                     withAnimation {
                         navigatedLocation = nil
+                        
                     }
                 }
                 // clear selection so tap is registered every annotation tap
@@ -112,6 +128,81 @@ struct MapHome: View {
                     Spacer()
                 }
                 Spacer()
+            }
+            
+            if let navLoc = navigatedLocation {
+
+//                Rectangle()
+//                    .background(.ultraThinMaterial.opacity(animate ? 0.1 : 0))
+//                    .ignoresSafeArea()
+//                    .onTapGesture {
+//                        withAnimation(.easeInOut(duration: 0.5)) {
+//                            navigatedLocation = nil
+//                        }
+//                    }
+//                    .zIndex(1)
+                Color.white.opacity(0.01)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            navigatedLocation = nil
+                        }
+                    }
+                    .zIndex(1)
+                
+                    
+                
+                
+                Group {
+                    Text(navLoc.country)
+                        .foregroundStyle(.white)
+                        .font(.largeTitle)
+                        .fontWeight(.heavy)
+                        .offset(y: -140)
+                        .fixedSize()
+
+                    Button {
+                        startExploring.toggle()
+                    } label: {
+                        PopupIcon(title: "Explore", iconName: "figure.walk.circle.fill", iconColor: .orange, startingDegree: 300.0)
+                    }
+                    .offset(x: -posOffset, y: -posOffset)
+
+                    
+                    Button(action: {
+                        sheetNavigationPath.append(navLoc)
+                        sheetSize = .large
+                        showLocationDetails.toggle()
+                    }, label: {
+                        PopupIcon(title: "Photos", iconName: "photo.circle.fill", iconColor: .purple, startingDegree: 310.0)
+                        
+                    })
+                    .offset(x: posOffset, y: -posOffset)
+                    
+                    
+                    Button(action: {
+                        sheetNavigationPath.removeLast(sheetNavigationPath.count)
+                        sheetSize = .medium
+                        showLocationDetails.toggle()
+                    }, label: {
+                        PopupIcon(title: "Info", iconName: "info.circle.fill", iconColor: .mint, startingDegree: 322.0)
+                    })
+                    .offset(x: posOffset, y: posOffset)
+                }
+                .scaleEffect(animate ? 1 : 0)
+                .opacity(animate ? 1 : 0)
+                .onAppear(perform: {
+                    withAnimation(.easeInOut(duration: 0.8)){
+                        animate.toggle()
+                    }
+                })
+                .onDisappear(perform: {
+                    withAnimation(.easeInOut(duration: 0.8)){
+                        animate.toggle()
+                    }
+                })
+                .zIndex(1.1)
+                
             }
             
             
