@@ -194,13 +194,13 @@ struct ProfileView: View {
                 }
             })
             .navigationDestination(isPresented: $showAllSelected) {
-                ImageContainerView(images: photoSelectionVM.retrievedImages, title: "Selected Images")
+                ImageContainerView(title: "Selected Images", images: photoSelectionVM.retrievedImages, dateGroupedImages: photoSelectionVM.dateGroupedImages(images: photoSelectionVM.retrievedImages))
             }
             .navigationDestination(isPresented: $displayShowCase) {
-                ImageContainerView(images: photoSelectionVM.showcaseImages, title: "Show Case")
+                ImageContainerView(title: "Show Case", images: photoSelectionVM.showcaseImages, dateGroupedImages: photoSelectionVM.dateGroupedImages(images: photoSelectionVM.showcaseImages))
             }
             .navigationDestination(for: CountryKey.self) { countryKey in
-                ImageContainerView(images: photoSelectionVM.locationGroupedImages[countryKey.countryName] ?? [], title: countryKey.countryName)
+                ImageContainerView(title: countryKey.countryName, images: photoSelectionVM.locationGroupedImages[countryKey.countryName] ?? [], dateGroupedImages: photoSelectionVM.dateGroupedImages(images: photoSelectionVM.locationGroupedImages[countryKey.countryName] ?? []))
             }
         }
     }

@@ -12,8 +12,10 @@ struct ImageContainerView: View {
     @EnvironmentObject var photoSelectionVM: PhotoSelectionViewModel
     let imageSize: CGFloat = 100
     
-    var images: [MapTagImage]
     var title: String
+    var images: [MapTagImage]
+    var dateGroupedImages: [String: [MapTagImage]]
+    
 
     var gridLayout: [GridItem] {
         if verticalSizeClass == .regular {
@@ -27,31 +29,89 @@ struct ImageContainerView: View {
     @State var selectedIndex: Int = 0
     @State var pos: CGPoint = CGPoint(x: 0, y: 0)
     
+    
+   @State var showAll = true
+    
     var body: some View {
         ZStack {
             ScrollView {
-                LazyVGrid(columns: gridLayout, alignment: .leading, spacing: 2) {
-                    ForEach(images.indices, id: \.self) { index in
-                        Button {
-                            selectedIndex = index
-                            withAnimation {
-                                showFullscreen.toggle()
+                if showAll {
+                    LazyVGrid(columns: gridLayout, alignment: .leading, spacing: 2) {
+                        
+                        ForEach(images.indices, id: \.self) { index in
+                            Button {
+                                selectedIndex = index
+                                withAnimation {
+                                    showFullscreen.toggle()
+                                }
+                            } label: {
+                                GeometryReader(content: { geometry in
+                                    images[index].image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: geometry.size.width, height: geometry.size.height)
+                                        .clipped()
+                                })
+                                .aspectRatio(1, contentMode: .fit)
                             }
-                        } label: {
-                            GeometryReader(content: { geometry in
-                                images[index].image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: geometry.size.width, height: geometry.size.height)
-                                    .clipped()
-                            })
-                            .aspectRatio(1, contentMode: .fit)
                         }
+                    }
+                } else {  // if grouped
+                    LazyVStack {
+                        
+                        ForEach(Array(dateGroupedImages.keys), id: \.self) { dateString in
+                            
+                            HStack {
+                                Text(dateString)
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+                            
+                            LazyVGrid(columns: gridLayout, alignment: .leading, spacing: 2) {
+                            ForEach(dateGroupedImages[dateString]!.indices, id: \.self) { index in
+                                Button {
+                                    selectedIndex = index
+                                    withAnimation {
+                                        showFullscreen.toggle()
+                                    }
+                                } label: {
+                                    GeometryReader(content: { geometry in
+                                        images[index].image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: geometry.size.width, height: geometry.size.height)
+                                            .clipped()
+                                    })
+                                    .aspectRatio(1, contentMode: .fit)
+                                }
+                            }
+                        }
+                    }
+                        
+                        
+                   
+                       
+                        
                     }
                 }
             }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar(content: {
+                //TODO: replace with menu
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(action: {
+                        //group and filter
+                        withAnimation {
+                            showAll.toggle()
+                        }
+                        
+                    }, label: {
+                        Image(systemName: "slider.horizontal.3")
+                    })
+                }
+            })
             .listRowInsets(.init())
             if showFullscreen, let originalIndex = photoSelectionVM.getImageOriginIndex(mapTagImage: images[selectedIndex]) {
                 FullscreenImage(showFullscreen: $showFullscreen, image: images[selectedIndex].image, isShowcased: $photoSelectionVM.retrievedImages[originalIndex].showcased)
@@ -63,6 +123,6 @@ struct ImageContainerView: View {
 
 #Preview {
     NavigationStack {
-        ImageContainerView(images: Array(repeating: MapTagImage(image: Image("FoxGlacier"), phAsset: nil), count: 8), title: "Test")
+        ImageContainerView(title: "Test", images: Array(repeating: MapTagImage(image: Image("FoxGlacier"), phAsset: nil, creationDate: Date()), count: 8), dateGroupedImages: PhotoSelectionViewModel().dateGroupedImages(images: Array(repeating: MapTagImage(image: Image("FoxGlacier"), phAsset: nil, creationDate: Date()), count: 8)))
     }
 }

@@ -62,8 +62,8 @@
             filePath = "MapTag/PhotoSelectionViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
             landmarkName = "loadImages(selectedImages:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,8 +78,8 @@
             filePath = "MapTag/PhotoSelectionViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
             landmarkName = "loadImages(selectedImages:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -162,6 +162,162 @@
             endingLineNumber = "69"
             landmarkName = "retrieveCountryPolygons()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8897C803-2E7C-4E65-BDDD-D952DBEEE053"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MapTag/Map/MapViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "setupCameraTransition(taggedLocation:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6B0FDAD8-00E9-4D41-A2ED-76742B13855B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MapTag/Map/MapViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
+            landmarkName = "setupCameraTransition(taggedLocation:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FEA858DC-CADE-4F78-84D5-1C709DFB10B4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MapTag/Map/MapViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
+            landmarkName = "setupCameraTransition(taggedLocation:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D1CF3581-4325-45BD-9B37-F0DE9F7A74F6"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MapTag/PhotoSelectionViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
+            landmarkName = "monthGroupedImages(images:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3F530F62-A69C-4BD3-A30D-48E2993D7BB7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MapTag/PhotoSelectionViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "monthGroupedImages(images:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3F530F62-A69C-4BD3-A30D-48E2993D7BB7 - e2c2610c5395b200"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (MapTag.MapTagImage) -&gt; () in MapTag.PhotoSelectionViewModel.monthGroupedImages(images: Swift.Array&lt;MapTag.MapTagImage&gt;) -&gt; Swift.Dictionary&lt;Swift.Int, Swift.Array&lt;MapTag.MapTagImage&gt;&gt;"
+                  moduleName = "MapTag"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/PhotoSelectionViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "116"
+                  endingLineNumber = "116">
+               </Location>
+               <Location
+                  uuid = "3F530F62-A69C-4BD3-A30D-48E2993D7BB7 - e2c2610c5395b200"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (MapTag.MapTagImage) -&gt; () in MapTag.PhotoSelectionViewModel.monthGroupedImages(images: Swift.Array&lt;MapTag.MapTagImage&gt;) -&gt; Swift.Dictionary&lt;Swift.Int, Swift.Array&lt;MapTag.MapTagImage&gt;&gt;"
+                  moduleName = "MapTag"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/PhotoSelectionViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "116"
+                  endingLineNumber = "116">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D327BF71-80B7-4DFF-96B7-E93B7015C851"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MapTag/PhotoSelectionViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "monthGroupedImages(images:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D327BF71-80B7-4DFF-96B7-E93B7015C851 - e2c2610c5395b242"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (MapTag.MapTagImage) -&gt; () in MapTag.PhotoSelectionViewModel.monthGroupedImages(images: Swift.Array&lt;MapTag.MapTagImage&gt;) -&gt; Swift.Dictionary&lt;Swift.Int, Swift.Array&lt;MapTag.MapTagImage&gt;&gt;"
+                  moduleName = "MapTag"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/PhotoSelectionViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "118"
+                  endingLineNumber = "118">
+               </Location>
+               <Location
+                  uuid = "D327BF71-80B7-4DFF-96B7-E93B7015C851 - e2c2610c5395b242"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (MapTag.MapTagImage) -&gt; () in MapTag.PhotoSelectionViewModel.monthGroupedImages(images: Swift.Array&lt;MapTag.MapTagImage&gt;) -&gt; Swift.Dictionary&lt;Swift.Int, Swift.Array&lt;MapTag.MapTagImage&gt;&gt;"
+                  moduleName = "MapTag"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/camgham/Documents/repos/MapTag/MapTag/PhotoSelectionViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "118"
+                  endingLineNumber = "118">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -28,6 +28,7 @@ class MapViewModel: ObservableObject {
     // camera transition info
     var animationDuration: Double = 0.0
     var calculatedCameraHeight: Double = 0.0
+    var mapRegion = MKCoordinateRegion()
 
     func getLocations(countries: [String]) async {
         for country in countries {
@@ -52,6 +53,7 @@ class MapViewModel: ObservableObject {
     
     func setCurrentPosition(mapCameraContext: MapCameraUpdateContext) {
         currentMapPoint = MKMapPoint(mapCameraContext.region.center)
+        mapRegion = mapCameraContext.region
     }
     
     
@@ -88,16 +90,16 @@ class MapViewModel: ObservableObject {
         
         // animation time
         switch distance {
-//        case let x where x < 100:
-//            duration = 0.01
-////        case let x where x < 1_000:
-////            duration = 0.2
-////        case let x where x < 10_000:
-////            duration = 0.4
-////        case let x where x < 100_000:
-////            duration = 0.6
-//        case let x where x < 1_000_000:
-//            duration = 0.8
+        case let x where x < 100:
+            animationDuration = 0.01
+        case let x where x < 1_000:
+            animationDuration = 0.1
+        case let x where x < 10_000:
+            animationDuration = 0.2
+        case let x where x < 500_000:
+            animationDuration = 0.4
+        case let x where x < 1_000_000:
+            animationDuration = 0.8
         default:
             animationDuration = 1.0
         }
@@ -105,8 +107,8 @@ class MapViewModel: ObservableObject {
         // altitude
         var minLat = Double.greatestFiniteMagnitude
         var minLong = Double.greatestFiniteMagnitude
-        var maxLat = 0.0
-        var maxLong = 0.0
+        var maxLat = -Double.greatestFiniteMagnitude
+        var maxLong = -Double.greatestFiniteMagnitude
         
         if let coordArr = countryPolygonDict[taggedLocation.country] {
             coordArr.forEach({ arr in
@@ -116,21 +118,23 @@ class MapViewModel: ObservableObject {
                         minLong = min(clCoord.longitude, minLong)
                         
                         maxLat = max(clCoord.latitude, maxLat)
-                        maxLong = min(clCoord.longitude, maxLong)
+                        maxLong = max(clCoord.longitude, maxLong)
                     }
                 }
             })
         }
-        let longSpan = abs(maxLong - minLong)
+        var longSpan = abs(maxLong - minLong)
+        if longSpan > 180 {
+            longSpan = 360 - longSpan
+        }
         let latSpan = abs(maxLat - minLat)
         
-        let longMeters = longSpan * 111_000 * cos(minLong * .pi / 180)
+        let longMeters = longSpan * 111_000 * cos(minLat * .pi / 180)
         let latMeters = latSpan * 111_000
-        
+        print("lat long = \(latMeters) x \(longMeters)")
         let rect = MKMapRect(origin: mapPoint, size: MKMapSize(width: longMeters, height: latMeters))
+
         calculatedCameraHeight = rect.height
-        print("dist: \(distance)")
-        print("ani: \(animationDuration)")
     }
     
     
@@ -160,7 +164,7 @@ struct TaggedLocation: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(country)
     }
-    
+     
     var country: String
     var location: CLLocation
     
