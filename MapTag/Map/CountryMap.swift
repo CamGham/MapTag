@@ -22,6 +22,17 @@ struct CountryMap: View {
     
     @State var monthGroupedImages: [Int: [MapTagImage]] = [:]
 
+    @State var zoom: CGFloat = 0.0
+    var scale: CGFloat {
+        if zoom < 100_000 {
+            return 1.0
+        } else if zoom < 1_000_000 {
+            return 0.8
+        } else {
+            return 0.5
+        }
+    }
+    
     var body: some View {
         ZStack {
             Map(position: $mapCam, bounds: MapCameraBounds(centerCoordinateBounds: mapRegion, maximumDistance: calculatedCameraHeight), interactionModes: [.pan, .zoom], scope: innerLoc) {
@@ -30,18 +41,25 @@ struct CountryMap: View {
                     // TODO: get averaged location
                     if let firstImage = monthGroupedImages[monthInt]?.first, let coord = firstImage.getImageCoords() {
                         Annotation(monthInt.getMonthString(), coordinate: coord) {
-                            firstImage.image
-                                .resizable()
-                                .aspectRatio(1.5, contentMode: .fit)
-                                .frame(width: 100)
+
+                            PhotoAnnotation(image: firstImage.image)
+                                .frame(width: scale * 100, height: scale * 100)
                         }
+                        
                     }
                 }
             }
+            
 
             .mapStyle(.hybrid(elevation: .realistic,
                               pointsOfInterest: PointOfInterestCategories.including(pointsOfInterest),
                               showsTraffic: false))
+            .onMapCameraChange(frequency: .continuous, { mapCam in
+                withAnimation {
+                    zoom = mapCam.camera.distance
+                }
+            })
+            
             
 //            .standard(elevation: .realistic, emphasis: .automatic, pointsOfInterest: PointOfInterestCategories.including(pointsOfInterest), showsTraffic: false)
             

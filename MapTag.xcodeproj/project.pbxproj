@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		420343202BCD0AA6005F5E70 /* PhotoAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4203431F2BCD0AA6005F5E70 /* PhotoAnnotation.swift */; };
 		420940CA2BBBDF6A004D9662 /* PhotoSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420940C92BBBDF6A004D9662 /* PhotoSelectionViewModel.swift */; };
 		420940CC2BBBE8F2004D9662 /* MutableProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420940CB2BBBE8F2004D9662 /* MutableProgress.swift */; };
 		4214C3D22BCB483E000EC059 /* LocationSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4214C3D12BCB483E000EC059 /* LocationSheetView.swift */; };
@@ -52,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4203431F2BCD0AA6005F5E70 /* PhotoAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAnnotation.swift; sourceTree = "<group>"; };
 		420940C92BBBDF6A004D9662 /* PhotoSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionViewModel.swift; sourceTree = "<group>"; };
 		420940CB2BBBE8F2004D9662 /* MutableProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableProgress.swift; sourceTree = "<group>"; };
 		4214C3D12BCB483E000EC059 /* LocationSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSheetView.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				4253BE9D2BC23A6600BD4E58 /* CountryBoundry.swift */,
 				4214C3D12BCB483E000EC059 /* LocationSheetView.swift */,
 				4214C3D32BCB5458000EC059 /* CountryMap.swift */,
+				4203431F2BCD0AA6005F5E70 /* PhotoAnnotation.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 				4214C3D42BCB5458000EC059 /* CountryMap.swift in Sources */,
 				42AD05372BBA717200F08D0B /* CountryListView.swift in Sources */,
 				42EE6FC72BC164A800E7313A /* LocationModalView.swift in Sources */,
+				420343202BCD0AA6005F5E70 /* PhotoAnnotation.swift in Sources */,
 				420940CA2BBBDF6A004D9662 /* PhotoSelectionViewModel.swift in Sources */,
 				423DCA132BBD40DA00AF21BB /* ProfileImageContainer.swift in Sources */,
 				42AD05352BBA4D8300F08D0B /* ProfileView.swift in Sources */,
