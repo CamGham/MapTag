@@ -9,9 +9,11 @@ import SwiftUI
 import CoreLocation
 
 struct LocationSheetView: View {
+    @EnvironmentObject var photoVM: PhotoSelectionViewModel
     var locationDict: [String: [MapTagImage]]
     @Binding var location: TaggedLocation?
     @Binding var navPath: NavigationPath
+   
     var body: some View {
         if let location = location {
             NavigationStack(path: $navPath) {
@@ -21,7 +23,7 @@ struct LocationSheetView: View {
                 }
                 .navigationTitle(location.country)
                 .navigationDestination(for: TaggedLocation.self) { location in
-                    ImageContainerView(images: locationDict[location.country] ?? [], title: location.country)
+                    ImageContainerView(title: location.country, images: locationDict[location.country] ?? [], dateGroupedImages: photoVM.dateGroupedImages(images: locationDict[location.country] ?? []))
                 }
             }
            
@@ -32,4 +34,5 @@ struct LocationSheetView: View {
 
 #Preview {
     LocationSheetView(locationDict: [:], location: .constant(TaggedLocation(country: "New Zealand", location: CLLocation(latitude: -40.900557, longitude: 174.885971))), navPath: .constant(NavigationPath()))
+        .environmentObject(PhotoSelectionViewModel())
 }

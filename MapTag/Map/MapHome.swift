@@ -207,8 +207,9 @@ struct MapHome: View {
             }
             
             
-            if startExploring {
-                CountryMap(startExploring: $startExploring , location: navigatedLocation, mapRegion:  mapVM.mapRegion, calculatedCameraHeight: mapVM.calculatedCameraHeight)
+            if startExploring, let loc = navigatedLocation {
+                CountryMap(startExploring: $startExploring , location: loc, mapRegion:  mapVM.mapRegion, calculatedCameraHeight: mapVM.calculatedCameraHeight)
+                    .zIndex(2.0)
             }
             
             // if show inside view
