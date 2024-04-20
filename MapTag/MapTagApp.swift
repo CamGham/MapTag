@@ -11,7 +11,7 @@ import SwiftUI
 struct MapTagApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MapTagTabView()
         }
     }
 }
