@@ -50,6 +50,7 @@ struct CountryMap: View {
     }
     
     @State var animateCamera = false
+    @State var countryLoaded = false
     
     var body: some View {
         ZStack {
@@ -83,7 +84,15 @@ struct CountryMap: View {
             HStack {
                 VStack {
                     Button(action: {
-                        startExploring.toggle()
+                        withAnimation(.easeIn(duration: 1.0)) {
+                            countryLoaded.toggle()
+                        } completion: {
+                            startExploring.toggle()
+                        }
+//                        withAnimation(.easeInOut(duration: 2.0)){
+//                            startExploring.toggle()
+//                        }
+                        
                     }, label: {
                         Text("EXIT")
                     })
@@ -117,9 +126,16 @@ struct CountryMap: View {
                 }))
                 .sensoryFeedback(.increase, trigger: currentMonthInt)
             }
+            
+            Color.black
+                .opacity(countryLoaded ? 0 : 1)
+                .ignoresSafeArea()
         }
         .onAppear(perform: {
             monthGroupedImages = photoVM.monthGroupedImages(images: photoVM.locationGroupedImages[location.country] ?? [])
+            withAnimation(.easeOut(duration: 1.0)) {
+                countryLoaded.toggle()
+            }
         })
         .onChange(of: currentLocation) { oldValue, newValue in
             // TODO: use old value to calc animation
