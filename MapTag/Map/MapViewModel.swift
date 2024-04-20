@@ -18,6 +18,8 @@ class MapViewModel: ObservableObject {
     // user tapped location
     @Published var selection: TaggedLocation?
     
+    @Published var mapState: MapState = MapState.globe
+    
     let goeCoder = CLGeocoder()
     // camera position updated onEnd of movement
     var currentMapPoint: MKMapPoint = MKMapPoint()
@@ -153,7 +155,9 @@ class MapViewModel: ObservableObject {
 //        }
 //
 //    }
-    
+    enum MapState {
+        case globe, country
+    }
 }
 
 struct TaggedLocation: Hashable {
