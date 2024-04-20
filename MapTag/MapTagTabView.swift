@@ -12,8 +12,8 @@ struct MapTagTabView: View {
     @StateObject var photoSelectionVM = PhotoSelectionViewModel()
     
     var body: some View {
-        TabView(selection: $mapTagCamera.selectedTab,
-                content:  {
+//        TabView(selection: $mapTagCamera.selectedTab,
+//                content:  {
             MapHome()
                 .tabItem {
                     Label("Map", systemImage: "map.fill")
@@ -22,14 +22,14 @@ struct MapTagTabView: View {
                 .environmentObject(mapTagCamera)
                 .environmentObject(photoSelectionVM)
             
-            CountryListView()
-                .tabItem {
-                    Label("Search", systemImage: "magnifyingglass")
-                }
-                .tag(TabViews.listTab)
-                .environmentObject(mapTagCamera)
-                .environmentObject(photoSelectionVM)
-        })
+//            CountryListView()
+//                .tabItem {
+//                    Label("Search", systemImage: "magnifyingglass")
+//                }
+//                .tag(TabViews.listTab)
+//                .environmentObject(mapTagCamera)
+//                .environmentObject(photoSelectionVM)
+//        })
     }
 }
 
