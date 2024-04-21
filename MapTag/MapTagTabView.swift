@@ -14,13 +14,22 @@ struct MapTagTabView: View {
     var body: some View {
 //        TabView(selection: $mapTagCamera.selectedTab,
 //                content:  {
-            MapHome()
-                .tabItem {
-                    Label("Map", systemImage: "map.fill")
-                }
-                .tag(TabViews.mapTab)
-                .environmentObject(mapTagCamera)
-                .environmentObject(photoSelectionVM)
+//        NavigationStack {
+//            ZStack {
+                MapHome()
+                //                .tabItem {
+                //                    Label("Map", systemImage: "map.fill")
+                //                }
+                //                .tag(TabViews.mapTab)
+                    .environmentObject(mapTagCamera)
+                    .environmentObject(photoSelectionVM)
+//                    .toolbar(search ? .visible : .hidden, for: .navigationBar)
+//            }
+//            .searchable(text: $searchQuery, isPresented: $search)
+//                .toolbar(search ? .visible : .hidden, for: .navigationBar)
+                
+//        }
+        
             
 //            CountryListView()
 //                .tabItem {
