@@ -27,16 +27,27 @@ struct ProfileView: View {
     
     @State var showError = false
     
+    //MARK: Private/Public Showcase
+    /// Need to implement storage, then online first
+    /// User settings storage (maybe User Defautls for now)
+    
+    @State var isAccountPublic = false
+    
     var body: some View {
         NavigationStack {
             Form {
                 if !photoSelectionVM.retrievedImages.isEmpty {
                     Section {
                         if photoSelectionVM.showcaseImages.isEmpty {
-                            Button("Create your showcase") {
-                                print("Initial showcase creation")
+                            HStack {
+                                Spacer()
+                                Button("Create your showcase") {
+                                    print("Initial showcase creation")
+                                }
+                                .buttonStyle(BorderlessButtonStyle())
+                                .disabled(photoSelectionVM.retrievedImages.isEmpty)
+                                Spacer()
                             }
-                            .disabled(photoSelectionVM.retrievedImages.isEmpty)
                         } else {
                             ScrollView(.horizontal) {
                                 HStack(spacing: 2) {
@@ -53,11 +64,14 @@ struct ProfileView: View {
                         HStack {
                             Text("Private Showcase")
                             
-                            Spacer()
+                            
                             //                        PhotosPicker(selection: $photoSelectionVM.selectedImages) {
                             //                            Image(systemName: "photo.badge.plus")
                             //                        }
-                            Text("showcase selector")
+//                            Text("showcase selector")
+//                            Toggle("Toggle Private", systemImage: "lock.open.fill", isOn: $isAccountPublic)
+//                                .toggleStyle(.button)
+//                                .controlSize(.mini)
                         }
                     } footer: {
                         HStack {
@@ -149,9 +163,17 @@ struct ProfileView: View {
                         Text("Your Photos")
                         
                         Spacer()
-                        PhotosPicker(selection: $photoSelectionVM.selectedImages) {
+                        
+                        
+//                        PhotosPicker(selection: $photoSelectionVM.selectedImages) {
+//                            
+//                        }
+                        PhotosPicker(selection: $photoSelectionVM.selectedImages, photoLibrary: .shared()) {
                             Image(systemName: "photo.badge.plus")
                         }
+                        
+                        
+                        
                     }
                 } footer: {
                     HStack {
@@ -162,7 +184,7 @@ struct ProfileView: View {
                         .disabled(photoSelectionVM.selectedImages.isEmpty)
                     }
                 }
-                
+                Text("\(photoSelectionVM.placemarkCountryKeys.count)")
                 if photoSelectionVM.placemarkCountryKeys.isEmpty && !photoSelectionVM.retrievedImages.isEmpty {
                     HStack {
                         Spacer()

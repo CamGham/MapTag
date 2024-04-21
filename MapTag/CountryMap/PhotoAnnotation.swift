@@ -25,7 +25,7 @@ struct PhotoAnnotation: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: geometry.size.width, height: geometry.size.height)
-                        .clipShape(.rect(cornerRadius: 20))
+                        .clipShape(.rect(cornerSize: CGSize(width: geo.size.width * 0.22, height: geo.size.height * 0.22)))
                 })
                 .aspectRatio(1, contentMode: .fit)
                 .frame(width: geo.size.width * 0.88, height: geo.size.height * 0.88)

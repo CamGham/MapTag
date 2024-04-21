@@ -15,9 +15,7 @@ struct MapHome: View {
     @State var openProfileSheet = false
     @State var navigatedLocation: TaggedLocation? = nil
     
-    private func showProfile() {
-        openProfileSheet.toggle()
-    }
+    
     
     @State private var moveCamera: Bool = false
     @State var fullScreenNav = false
@@ -45,6 +43,9 @@ struct MapHome: View {
     }
     
     @State var countryReady = false
+    
+    
+    
 
     var body: some View {
         switch mapVM.mapState {
@@ -71,14 +72,14 @@ struct MapHome: View {
                 .mapStyle(.hybrid(elevation: .realistic,
                                   pointsOfInterest: PointOfInterestCategories.including(pointsOfInterest),
                                   showsTraffic: false))
-                .mapControls {
-                    MapUserLocationButton()
-                }
-                .mapControlVisibility(.visible)
+//                .mapControls {
+//                    MapUserLocationButton()
+//                }
+//                .mapControlVisibility(.visible)
+                .mapControlVisibility(.hidden)
                 .onMapCameraChange(frequency: .onEnd, { mapCameraContext in
                     // if user taps an annotation
                     // and camera ends at expected location (animation was not interupted by user)
-                    print("over selection \(mapVM.selection)")
                     if let selection = mapVM.selection,
                        (Double(mapCameraContext.camera.centerCoordinate.latitude).rounded(toPlaces: 2) == Double(selection.location.coordinate.latitude).rounded(toPlaces: 2) &&
                         Double(mapCameraContext.camera.centerCoordinate.longitude).rounded(toPlaces: 2) == Double(selection.location.coordinate.longitude).rounded(toPlaces: 2)) {
@@ -87,10 +88,8 @@ struct MapHome: View {
                                 navigatedLocation = selection
                             }
                     } else {
-                        print("over making nil")
                         withAnimation {
                             navigatedLocation = nil
-                            
                         }
                         // clear selection so tap is registered every annotation tap
                         mapVM.selection = nil
@@ -101,7 +100,6 @@ struct MapHome: View {
                 })
                 .onReceive(mapVM.$selection, perform: { newSelection in
                     if let selection = newSelection {
-                        // eventually remove
                         mapVM.setupCameraTransition(taggedLocation: selection)
                         moveCamera.toggle()
                     }
@@ -115,27 +113,11 @@ struct MapHome: View {
                     }
                 })
                 
-                HStack {
-                    VStack {
-                        Button(action: showProfile, label: {
-                            Image(systemName: "person.crop.circle")
-                        })
-                        .buttonStyle(BorderedProminentButtonStyle())
-                        .padding(4)
-                        
-                        Button(action: {
-                            print("do something")
-                        }, label: {
-                            Image(systemName: "camera.fill")
-                            
-                        })
-                        .buttonStyle(BorderedButtonStyle())
-                        .padding(4)
-                        
-                        Spacer()
-                    }
-                    Spacer()
-                }
+                
+                GlobeButtons(openProfileSheet: $openProfileSheet)
+                
+//                .toolbarBackground(.hidden, for: .navigationBar)
+//                .toolbar(.visible, for: .navigationBar)
                 
                 if let navLoc = navigatedLocation {
                     Color.white.opacity(0.01)
