@@ -12,19 +12,31 @@ struct CountryListView: View {
     @EnvironmentObject var mapTagCamera: MapViewModel
     @EnvironmentObject var photoSelectionVM: PhotoSelectionViewModel
     @StateObject var countriesVM = CountriesViewModel()
-    @State var navPath = NavigationPath()
+    
+    var searchQuery: String
+//    @State var navPath = NavigationPath()
     
     private func navToCountryPos(country: Country) {
         mapTagCamera.mapCameraPosition = .camera(.init(centerCoordinate: CLLocationCoordinate2D(latitude: country.lattitude, longitude: country.longitude), distance: 20_000_000.0))
-        mapTagCamera.selectedTab = .mapTab
+//        mapTagCamera.selectedTab = .mapTab
+    }
+    
+    var filteredList: [Country] {
+        if searchQuery != "" {
+            countriesVM.countriesList.filter { country in
+                country.name.lowercased().contains(searchQuery.lowercased())
+            }
+        } else {
+            countriesVM.countriesList
+        }
     }
     
     var body: some View {
-        NavigationStack(path: $navPath) {
+//        NavigationStack(path: $navPath) {
             List {
-                ForEach(countriesVM.countriesList, id: \.self) { country in
+                ForEach(filteredList, id: \.self) { country in
                     
-                    NavigationLink(value: country) {
+//                    NavigationLink(value: country) {
                         CountryRowView(country: country)
                             .swipeActions {
                                 Button("Favourite",
@@ -38,21 +50,33 @@ struct CountryListView: View {
                                 })
                                 .tint(.purple)
                             }
-                    }
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 16))
+                            
+//                            .listRowSeparator(.hidden)
+//                            .listRowBackground(Color.clear)
+//                    }
+                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .listRowBackground(Color(.tertiarySystemGroupedBackground))
+                    
                     
                 }
             }
-            .navigationTitle("Countries")
-            .navigationDestination(for: Country.self) { country in
-                CountryDetailView(country: country)
-            }
-        }
+            .listStyle(.plain)
+            .clipShape(.rect(cornerRadius: 8))
+//            .listStyle(.plain)
+//            .listRowBackground(Color.gray)
+//            .listItemTint(.pink)
+            
+        
+//            .navigationTitle("Countries")
+//            .navigationDestination(for: Country.self) { country in
+//                CountryDetailView(country: country)
+//            }
+//        }
     }
 }
 
 #Preview {
-    CountryListView()
+    CountryListView(searchQuery: "")
         .environmentObject(MapViewModel())
 }
 
@@ -71,10 +95,12 @@ struct CountryRowView: View {
             
             Text(country.name)
                 .font(.title2)
+            Spacer()
             if country.isFavourite {
                 Image(systemName: "star.fill")
             }
         }
+        .background(Color(.tertiarySystemGroupedBackground))
         
         
     }
