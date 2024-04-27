@@ -9,42 +9,21 @@ import SwiftUI
 import MapKit
 
 struct MapAnnotation: View {
-    var location: TaggedLocation
-    @Binding var navigatedLocation: TaggedLocation?
-    @Binding var showLocationDetails: Bool
-    @Binding var startExploring: Bool
-    @Binding var navPath: NavigationPath
-    @Binding var sheetSize: PresentationDetent
-    
-    //    @State var showPopover = false
-    //    @Binding var cameraPosition: MapCameraPosition
-    
     var body: some View {
-        ZStack {
-            Image(systemName: "mappin")
-                .resizable()
-                .scaledToFit()
-                .frame(height:44)
-                .foregroundStyle(.background)
-            
-            
-            
-            
-            
-        }
-        
-        
-        
-        
+        Image(systemName: "mappin")
+            .resizable()
+            .scaledToFit()
+            .frame(height:44)
+            .foregroundStyle(Color(.secondarySystemGroupedBackground))
     }
 }
 
-#Preview {
-    ZStack {
-        Color.blue.opacity(0.6)
-        MapAnnotation(location: TaggedLocation(country: "New Zealand", location: CLLocation(latitude: -40.900557, longitude: 174.885971)), navigatedLocation: .constant(TaggedLocation(country: "New Zealand", location: CLLocation(latitude: -40.900557, longitude: 174.885971))), showLocationDetails: .constant(false), startExploring: .constant(false), navPath: .constant(NavigationPath()), sheetSize: .constant(.medium))
-    }
-}
+//#Preview {
+//    ZStack {
+//        Color.blue.opacity(0.6)
+//        MapAnnotation(location: TaggedLocation(country: "New Zealand", location: CLLocation(latitude: -40.900557, longitude: 174.885971)), navigatedLocation: .constant(TaggedLocation(country: "New Zealand", location: CLLocation(latitude: -40.900557, longitude: 174.885971))), showLocationDetails: .constant(false), startExploring: .constant(false), navPath: .constant(NavigationPath()), sheetSize: .constant(.medium))
+//    }
+//}
 
 struct PopupIcon: View {
     var title: String

@@ -14,6 +14,8 @@ import ImageIO
 class PhotoSelectionViewModel: ObservableObject {
     let geoCoder = CLGeocoder()
     
+    let testImgIden = "8855B154-86CF-49A7-A5F8-1117A13A719F/L0/001"
+    
     @Published var imageState: ImageState = .empty
     @Published var selectedImages: [PhotosPickerItem] = [] {
         didSet {
@@ -26,13 +28,89 @@ class PhotoSelectionViewModel: ObservableObject {
         }
     }
     //MapTagImage.testData
-    @Published var retrievedImages: [MapTagImage] = [] {
+    @Published var retrievedImages: [MapTagImage] = [MapTagImage.testData] {
         didSet {
             Task {
                 await geoLocateImages()
             }
         }
     }
+    
+    @Published var testImage: UIImage?
+    
+    func retrieveUserPhotos() async {
+        let photoItem = PhotosPickerItem(itemIdentifier: testImgIden)
+        selectedImages.append(photoItem)
+
+//        self.imageState = .loading(T##Progress)
+        let assetManager = PHImageManager.default()
+        let assetReq = PHAsset.fetchAssets(withLocalIdentifiers: [testImgIden], options: nil)
+//        
+        if let asset = assetReq.firstObject {
+            let imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+            //
+            assetManager.requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFit, options: .none) { uiImage, hashArr in
+                
+                guard let unwrappedUiImage = uiImage else { return }
+                let image = Image(uiImage: unwrappedUiImage)
+                
+                let newImage = MapTagImage(id: self.testImgIden, image: image, phAsset: asset)
+                
+//                if !self.retrievedImages.isEmpty, let index = self.retrievedImages.firstIndex(where: { mapImg in
+//                    mapImg.id == newImage.id
+//                }) {
+//                    self.retrievedImages.remove(at: index)
+//                }
+                let degradeKey = PHImageResultIsDegradedKey
+                if let isDegraded = hashArr?[degradeKey], let bool = isDegraded as? NSNumber, bool == 0 {
+//                    let isLowQual = hashArr
+                    self.retrievedImages.append(newImage)
+                    self.imageState = .success(self.retrievedImages)
+                } else {
+                    self.imageState = .empty
+                }
+               
+                
+            }
+        }
+                
+    }
+    
+//    func testAddPhoto() {
+////        selectedImages = [testImg]
+//        
+////        let photoItem = PhotosPickerItem(itemIdentifier: testImgIden)
+////        
+////        self.selectedImages.append(PhotosPickerItem(itemIdentifier: self.testImgIden))
+//        
+////        let assetReq = PHAsset.fetchAssets(withLocalIdentifiers: [testImgIden], options: nil)
+////        
+////        let assetManager = PHImageManager.default()
+////        if let asset = assetReq.firstObject {
+////            let imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+////            
+////            assetManager.requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFit, options: .none) { uiImage, hashArr in
+////                guard let unwrappedUiImage = uiImage else { return }
+////                let image = Image(uiImage: unwrappedUiImage)
+////                
+////                
+//////                self.selectedImages.append(PhotosPickerItem(itemIdentifier: self.testImgIden))
+////   
+////                self.retrievedImages.append(MapTagImage(image: image, phAsset: asset))
+//////                
+////                self.imageState = .success(self.retrievedImages)
+////            }
+////        }
+//        
+////        Task {
+////            if let selectedImage = try await testImg.loadTransferable(type: Image.self){
+////                
+////                retrievedImages.append(MapTagImage(image: selectedImage, phAsset: nil))
+////            } else {
+////                print("a")
+////            }
+////            }
+//    }
     
     var showcaseImages: [MapTagImage] {
         retrievedImages.filter { mapTagImage in
@@ -53,6 +131,7 @@ class PhotoSelectionViewModel: ObservableObject {
                 } else {
                     tempDict["New Zealand"] = [copyImage]
                 }
+                locationGroupedImages = tempDict
                 return
             }
             

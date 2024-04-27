@@ -33,24 +33,18 @@ struct CountryMap: View {
         }
     }
     
-    @State var height: Double = 0
-    
-    var textHeight: Double {
-        height / Double(Calendar.current.monthSymbols.count)
-    }
-    
-    @State var dragPos: Double = 0.0
-    
-    var currentMonthInt: Int {
-        Int(dragPos.rounded(.down))
-    }
+    @State var currentIndex = 0
     
     var currentLocation: CLLocationCoordinate2D? {
-        monthGroupedImages[currentMonthInt]?.first?.getImageCoords()
+        monthGroupedImages[currentIndex]?.first?.getImageCoords()
     }
     
     @State var animateCamera = false
     @State var countryLoaded = false
+    
+    //TODO: currently string arr, change to date?
+    var dateRange = Calendar.current.monthSymbols
+    
     
     var body: some View {
         ZStack {
@@ -97,39 +91,28 @@ struct CountryMap: View {
                         Text("EXIT")
                     })
                     .buttonStyle(BorderedProminentButtonStyle())
-                    .padding(4)
+                    .padding(8)
                     
                     Spacer()
                 }
                 Spacer()
             }
             
+            Text("\(currentIndex)")
+                .font(.largeTitle)
+            
             HStack {
                 Spacer()
-                VStack {
-                    ForEach(Calendar.current.monthSymbols.indices, id: \.self) { index in
-                        TimelineView(timeString: Calendar.current.monthSymbols[index], index: index, dragPos: dragPos, textHeight: textHeight)
-                    }
-                }
-                .coordinateSpace(name: "Dates")
-                .overlay(content: {
-                    GeometryReader(content: { geometry in
-                        Rectangle().opacity(0.2)
-                            .onAppear {
-                                height = geometry.size.height
-                            }
-                    })
-                })
-                .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .named("Dates")).onChanged({ dragValue in
-                    var index = dragValue.location.y / textHeight
-                    dragPos = index
-                }))
-                .sensoryFeedback(.increase, trigger: currentMonthInt)
+                
+                TimelineView(dateRange: dateRange, currentIndex: $currentIndex)
             }
             
             Color.black
                 .opacity(countryLoaded ? 0 : 1)
                 .ignoresSafeArea()
+            
+            
+            
         }
         .onAppear(perform: {
             monthGroupedImages = photoVM.monthGroupedImages(images: photoVM.locationGroupedImages[location.country] ?? [])

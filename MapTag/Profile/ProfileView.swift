@@ -174,6 +174,8 @@ struct ProfileView: View {
                         
                         
                         
+                        
+                        
                     }
                 } footer: {
                     HStack {
@@ -184,7 +186,10 @@ struct ProfileView: View {
                         .disabled(photoSelectionVM.selectedImages.isEmpty)
                     }
                 }
-                Text("\(photoSelectionVM.placemarkCountryKeys.count)")
+                
+                Text("\(photoSelectionVM.retrievedImages.count)")
+//                ForEach(photoSelectionVM.retrievedImages) 
+
                 if photoSelectionVM.placemarkCountryKeys.isEmpty && !photoSelectionVM.retrievedImages.isEmpty {
                     HStack {
                         Spacer()

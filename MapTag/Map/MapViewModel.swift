@@ -11,7 +11,6 @@ import MapKit
 
 @MainActor
 class MapViewModel: ObservableObject {
-    @Published var selectedTab = TabViews.mapTab
     @Published var mapCameraPosition: MapCameraPosition = .userLocation(fallback: .region(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: -40.900557, longitude: 174.885971), span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10))))
     // locations from photo metadata
     @Published var taggedLocations: [TaggedLocation] = []

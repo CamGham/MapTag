@@ -14,11 +14,9 @@ struct MapHome: View {
     
     @State var openProfileSheet = false
     @State var navigatedLocation: TaggedLocation? = nil
-    
-    
-    
+
     @State private var moveCamera: Bool = false
-    @State var fullScreenNav = false
+//    @State var fullScreenNav = false
     
     // TODO: let user change the interest filters
     var pointsOfInterest: [MKPointOfInterestCategory] = [.airport,.amusementPark,.aquarium,.bakery,.beach,.brewery, .cafe,.campground,.carRental,.foodMarket,.gasStation,.hotel,.marina,.museum,.nationalPark,.nightlife,.park,.parking,.publicTransport,.restaurant,.stadium,.store,.winery,.zoo]
@@ -45,7 +43,10 @@ struct MapHome: View {
     @State var countryReady = false
     
     
-    
+    private func camIsAtLocation(mapCameraContext: MapCameraUpdateContext, selection: TaggedLocation) -> Bool {
+        return (Double(mapCameraContext.camera.centerCoordinate.latitude).rounded(toPlaces: 2) == Double(selection.location.coordinate.latitude).rounded(toPlaces: 2) &&
+                Double(mapCameraContext.camera.centerCoordinate.longitude).rounded(toPlaces: 2) == Double(selection.location.coordinate.longitude).rounded(toPlaces: 2))
+    }
 
     var body: some View {
         switch mapVM.mapState {
@@ -58,9 +59,7 @@ struct MapHome: View {
                 Map(position: $mapVM.mapCameraPosition, interactionModes: userInteractions, selection: $mapVM.selection) {
                     ForEach(mapVM.taggedLocations, id: \.self) { location in
                         Annotation(location.country, coordinate: location.location.coordinate) {
-                            MapAnnotation(location: location, navigatedLocation: $navigatedLocation, showLocationDetails: $showLocationDetails, startExploring: $startExploring, navPath: $sheetNavigationPath, sheetSize: $sheetSize)
-                                .selectionDisabled(navigatedLocation == location)
-                                
+                            MapAnnotation()
                         }
                         .tag(location)
                         .annotationTitles(navigatedLocation != nil ? .hidden : .visible)
@@ -81,8 +80,7 @@ struct MapHome: View {
                     // if user taps an annotation
                     // and camera ends at expected location (animation was not interupted by user)
                     if let selection = mapVM.selection,
-                       (Double(mapCameraContext.camera.centerCoordinate.latitude).rounded(toPlaces: 2) == Double(selection.location.coordinate.latitude).rounded(toPlaces: 2) &&
-                        Double(mapCameraContext.camera.centerCoordinate.longitude).rounded(toPlaces: 2) == Double(selection.location.coordinate.longitude).rounded(toPlaces: 2)) {
+                       camIsAtLocation(mapCameraContext: mapCameraContext, selection: selection) {
                         // show popover
                             withAnimation {
                                 navigatedLocation = selection
@@ -95,7 +93,7 @@ struct MapHome: View {
                         mapVM.selection = nil
                     }
                     
-                    
+                    // get current cam pos everytime the camera stops
                     mapVM.setCurrentPosition(mapCameraContext: mapCameraContext)
                 })
                 .onReceive(mapVM.$selection, perform: { newSelection in
@@ -113,11 +111,7 @@ struct MapHome: View {
                     }
                 })
                 
-                
                 GlobeButtons(openProfileSheet: $openProfileSheet)
-                
-//                .toolbarBackground(.hidden, for: .navigationBar)
-//                .toolbar(.visible, for: .navigationBar)
                 
                 if let navLoc = navigatedLocation {
                     Color.white.opacity(0.01)
@@ -191,9 +185,6 @@ struct MapHome: View {
                     
                 }
                 
-                
-                
-                
                 Color.black.opacity(countryReady ? 1 : 0)
                     .ignoresSafeArea()
                     .zIndex(1.2)
@@ -205,21 +196,11 @@ struct MapHome: View {
                         }
                     }
                         
-                
-                
-                // if show inside view
     //            LocationModalView(locationDict: photoSelectionVM.locationGroupedImages, navigatedLocation: $navigatedLocation)
-    //            if navigatedLocation != nil {
-    //                Rectangle()
-    //                    .ignoresSafeArea()
-    //                    .scaledToFill()
-    //                    .foregroundStyle(.ultraThinMaterial)
-    //                    .zIndex(1.1)
-    //
-    //            }
             }
             .task {
                 mapVM.retrieveCountryPolygons()
+                await photoSelectionVM.retrieveUserPhotos()
             }
             .task(id: photoSelectionVM.placemarkCountryKeys, {
                 await mapVM.getLocations(countries: photoSelectionVM.placemarkCountryKeys)
@@ -238,18 +219,12 @@ struct MapHome: View {
                         mapVM.selection = navigatedLocation
                         mapVM.mapState = .globe
                     })
-                    
             }
         }
-        
-        
-        
     }
 }
 
 #Preview {
-//    let loc = TaggedLocation(country: "New Zealand", location: CLLocation(latitude: -40.900557, longitude: 174.885971))
-    
     MapHome()
         .environmentObject(MapViewModel())
         .environmentObject(PhotoSelectionViewModel())
