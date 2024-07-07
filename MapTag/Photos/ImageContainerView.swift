@@ -32,6 +32,8 @@ struct ImageContainerView: View {
     
    @State var showAll = true
     
+    @Namespace var imageView
+    
     var body: some View {
         ZStack {
             ScrollView {
@@ -51,8 +53,10 @@ struct ImageContainerView: View {
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: geometry.size.width, height: geometry.size.height)
                                         .clipped()
+                                        .matchedGeometryEffect(id: "image", in: imageView)
                                 })
                                 .aspectRatio(1, contentMode: .fit)
+//                                .matchedGeometryEffect(id: "image", in: imageView, isSource: true)
                             }
                         }
                     }
@@ -71,7 +75,7 @@ struct ImageContainerView: View {
                             ForEach(dateGroupedImages[dateString]!.indices, id: \.self) { index in
                                 Button {
                                     selectedIndex = index
-                                    withAnimation {
+                                    withAnimation(.easeOut) {
                                         showFullscreen.toggle()
                                     }
                                 } label: {
@@ -83,6 +87,7 @@ struct ImageContainerView: View {
                                             .clipped()
                                     })
                                     .aspectRatio(1, contentMode: .fit)
+//                                    .animation(.bouncy, value: showFullscreen)
                                 }
                             }
                         }
@@ -110,11 +115,12 @@ struct ImageContainerView: View {
                     }, label: {
                         Image(systemName: "slider.horizontal.3")
                     })
+                    .opacity(showFullscreen ? 0 : 1)
                 }
             })
             .listRowInsets(.init())
             if showFullscreen, let originalIndex = photoSelectionVM.getImageOriginIndex(mapTagImage: images[selectedIndex]) {
-                FullscreenImage(showFullscreen: $showFullscreen, image: images[selectedIndex].image, isShowcased: $photoSelectionVM.retrievedImages[originalIndex].showcased)
+                FullscreenImage(showFullscreen: $showFullscreen, image: images[selectedIndex].image, index: selectedIndex, isShowcased: $photoSelectionVM.retrievedImages[originalIndex].showcased, imageView: imageView)
                     
             }
         }

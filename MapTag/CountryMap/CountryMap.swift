@@ -10,6 +10,7 @@ import MapKit
 
 struct CountryMap: View {
     @EnvironmentObject var photoVM: PhotoSelectionViewModel
+    @StateObject var countryMapVM = CountryMapViewModel()
     @Binding var startExploring: Bool
     var location: TaggedLocation
     var mapRegion: MKCoordinateRegion
@@ -20,24 +21,35 @@ struct CountryMap: View {
     
     @State var mapCam: MapCameraPosition = .region((MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: -40.900557, longitude: 174.885971), span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))))
     
+    
+    
     @State var monthGroupedImages: [Int: [MapTagImage]] = [:]
     
-    @State var zoom: CGFloat = 0.0
-    var scale: CGFloat {
-        if zoom < 100_000 {
-            return 1.0
-        } else if zoom < 1_000_000 {
-            return 0.8
-        } else {
-            return 0.5
-        }
-    }
+//    var zoom: CGFloat = 0.0
+//    var scale: CGFloat {
+//        if zoom < 100_000 {
+//            return 1.0
+//        } else if zoom < 1_000_000 {
+//            return 0.8
+//        } else {
+//            return 0.5
+//        }
+//    }
     
     @State var currentIndex = 0
+    @State var manualIndexUpdate = false
     
-    var currentLocation: CLLocationCoordinate2D? {
-        monthGroupedImages[currentIndex]?.first?.getImageCoords()
+    var currentLocation: AnimatableLocation? {
+        countryMapVM.getCenterOfImages(images: monthGroupedImages[currentIndex], currentHeight: countryMapVM.zoom)
+        
+        
+//        monthGroupedImages[currentIndex]?.first?.getImageCoords()
     }
+    
+//    func getZoom() -> Double {
+//        return self.zoom
+//    }
+    
     
     @State var animateCamera = false
     @State var countryLoaded = false
@@ -45,33 +57,57 @@ struct CountryMap: View {
     //TODO: currently string arr, change to date?
     var dateRange = Calendar.current.monthSymbols
     
+    @State var imageDateGrouping = DateGroup.custom
+    
+    var groupings: [DateGroup] = [.custom, .month, .week, .day]
+    
     
     var body: some View {
+        let _ = Self._printChanges()
         ZStack {
             Map(position: $mapCam, bounds: MapCameraBounds(centerCoordinateBounds: mapRegion, maximumDistance: calculatedCameraHeight), interactionModes: [.pan, .zoom], scope: innerLoc) {
                 ForEach(Array(monthGroupedImages.keys), id: \.self) { monthInt in
-                    // TODO: get averaged location
-                    if let firstImage = monthGroupedImages[monthInt]?.first, let coord = firstImage.getImageCoords() {
-                        Annotation(monthInt.getMonthString(), coordinate: coord) {
+                    
+                    //TODO: check if this gets called evytime zoom changes - dont twant this
+                    if let animateableLocation =  countryMapVM.getCenterOfImages(images: monthGroupedImages[monthInt], currentHeight: nil), let firstImage = monthGroupedImages[monthInt]?.first {
+                        let _ = print("innder ann created")
+                        
+                        Annotation(monthInt.getMonthString(), coordinate: animateableLocation.location) {
                             
                             PhotoAnnotation(image: firstImage.image)
-                                .frame(width: scale * 100, height: scale * 100)
+                                .frame(width: 80, height: 80)
+//                                .frame(width: scale * 100, height: scale * 100)
                         }
-                        
                     }
+                    
+                    
+                    
+                    
+                    // TODO: get averaged location
+//                    if let firstImage = monthGroupedImages[monthInt]?.first, let coord = firstImage.getImageCoords() {
+//                        Annotation(monthInt.getMonthString(), coordinate: coord) {
+//                            
+//                            PhotoAnnotation(image: firstImage.image)
+//                                .frame(width: scale * 100, height: scale * 100)
+//                        }
+//                    }
                 }
             }
             .mapStyle(.hybrid(elevation: .realistic,
                               pointsOfInterest: PointOfInterestCategories.including(pointsOfInterest),
                               showsTraffic: false))
-            .onMapCameraChange(frequency: .continuous, { mapCam in
-                withAnimation {
-                    zoom = mapCam.camera.distance
-                }
-            })
+//            .onMapCameraChange(frequency: .continuous, { mapCam in
+////                withAnimation {
+//                countryMapVM.zoom = mapCam.camera.distance
+////                }
+//            })
             .mapCameraKeyframeAnimator(trigger: animateCamera) { mapCamera in
                 KeyframeTrack(\.centerCoordinate) {
-                    CubicKeyframe(currentLocation!, duration: 1)
+                    CubicKeyframe(currentLocation!.location, duration: 1)
+                }
+                
+                KeyframeTrack(\.distance) {
+                    CubicKeyframe(currentLocation!.height, duration: 1)
                 }
             }
 
@@ -94,17 +130,59 @@ struct CountryMap: View {
                     .padding(8)
                     
                     Spacer()
+                    
+                    
                 }
+                
+                
+                
                 Spacer()
+                
+                VStack {
+                    
+                    Picker("Group By", selection: $imageDateGrouping) {
+                        ForEach(groupings, id: \.self) { group in
+                            Text(group.rawValue)
+                        }
+                    }
+                    Spacer()
+                }
             }
             
-            Text("\(currentIndex)")
-                .font(.largeTitle)
+//            Text("\(currentIndex)")
+//                .font(.largeTitle)
             
             HStack {
                 Spacer()
-                
-                TimelineView(dateRange: dateRange, currentIndex: $currentIndex)
+                VStack(spacing: 16) {
+                    Button(action: {
+                        if currentIndex > 0 {
+                            currentIndex -= 1
+                        manualIndexUpdate.toggle()
+                        }
+                    }, label: {
+                        Text("Month -1")
+                            .foregroundStyle(.primary)
+                    })
+                    .disabled(currentIndex == 0)
+                    .buttonStyle(BorderedButtonStyle())
+                    
+                    TimelineView(dateRange: dateRange, currentIndex: $currentIndex, updateDrag: $manualIndexUpdate)
+                    
+                    Button(action: {
+                        if currentIndex < 11 {
+                            //withAnimation {
+                                currentIndex += 1
+                            manualIndexUpdate.toggle()
+                            //}
+                            
+                        }
+                    }, label: {
+                        Text("Month +1")
+                    })
+                    .disabled(currentIndex == 11)
+                    .buttonStyle(BorderedButtonStyle())
+                }
             }
             
             Color.black
@@ -126,11 +204,12 @@ struct CountryMap: View {
                 animateCamera.toggle()
             }
         }
+        
     }
 }
 
 #Preview {
-    CountryMap(startExploring: .constant(true),location: TaggedLocation(country: "New Zealand", location: CLLocation(latitude: -40.900557, longitude: 174.885971)), mapRegion: MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: -41.837132505080696, longitude: 172.79331092869865), span: MKCoordinateSpan(latitudeDelta: 24.752210992836861, longitudeDelta: 19.233723900868455)), calculatedCameraHeight: 4890336.595950017)
+    CountryMap(countryMapVM: CountryMapViewModel(), startExploring: .constant(true),location: TaggedLocation(country: "New Zealand", location: CLLocation(latitude: -40.900557, longitude: 174.885971)), mapRegion: MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: -41.837132505080696, longitude: 172.79331092869865), span: MKCoordinateSpan(latitudeDelta: 24.752210992836861, longitudeDelta: 19.233723900868455)), calculatedCameraHeight: 4890336.595950017)
         .environmentObject(PhotoSelectionViewModel())
 }
 
@@ -149,3 +228,11 @@ extension CLLocationCoordinate2D: Equatable {
     
 }
 
+struct AnimatableLocation: Equatable {
+    var location: CLLocationCoordinate2D
+    var height: CLLocationDistance
+}
+
+enum DateGroup: String {
+    case custom = "default", month, week, day
+}

@@ -20,6 +20,7 @@ class PhotoSelectionViewModel: ObservableObject {
     @Published var selectedImages: [PhotosPickerItem] = [] {
         didSet {
             if !selectedImages.isEmpty {
+                print("loading images \(selectedImages.count)")
                 let progress = loadImages(selectedImages: selectedImages)
                 imageState = .loading(progress)
             } else {
@@ -28,11 +29,14 @@ class PhotoSelectionViewModel: ObservableObject {
         }
     }
     //MapTagImage.testData
-    @Published var retrievedImages: [MapTagImage] = [MapTagImage.testData] {
+    @Published var retrievedImages: [MapTagImage] = [] {
         didSet {
-            Task {
-                await geoLocateImages()
-            }
+            
+                Task {
+                    print("geo locating images")
+                    await geoLocateImages()
+                }
+            
         }
     }
     
@@ -153,7 +157,15 @@ class PhotoSelectionViewModel: ObservableObject {
                     }
                 }
             } catch {
-                
+                var copyImage = taggedImage
+                copyImage.creationDate = Date()
+                if tempDict.keys.contains("New Zealand") {
+                    tempDict["New Zealand"]?.append(copyImage)
+                } else {
+                    tempDict["New Zealand"] = [copyImage]
+                }
+                locationGroupedImages = tempDict
+                return
             }
         }
         locationGroupedImages = tempDict
@@ -161,6 +173,7 @@ class PhotoSelectionViewModel: ObservableObject {
     
     @Published var locationGroupedImages: [String: [MapTagImage]] = [:]
     
+    //TODO: is getting called constantly - remove all computed v ariables on map viewmodel 
     var placemarkCountryKeys: [String] {
         locationGroupedImages.keys.sorted()
     }
@@ -202,6 +215,97 @@ class PhotoSelectionViewModel: ObservableObject {
         return tempDict
     }
     
+    //TODO: currently setup for local datetime - implement ability to orgainse by date of timezone where photo took place
+    func groupImagesByDate(images: [MapTagImage], dateGroup: DateGroup) -> [String: [MapTagImage]] {
+        
+        var monthDict: [String: [MapTagImage]] = [:]
+        var weekDict: [String: [MapTagImage]] = [:]
+        var dayDict: [String: [MapTagImage]] = [:]
+        
+        let dateFilteredImages = images.filter { mapTagImage in
+            mapTagImage.creationDate != nil
+        }
+    
+        
+        let dateOrganisedImages = dateFilteredImages.sorted { img1, img2 in
+            if let date1 = img1.creationDate {
+                if let date2 = img2.creationDate {
+                    return date1 < date2
+                } else {
+                    return true
+                }
+            } else {
+                if let _ = img2.creationDate {
+                    return false
+                } else {
+                    return true
+                }
+            }
+        }
+        let calender = Calendar.current
+        
+        
+        if let startDate = dateOrganisedImages.first?.creationDate, let endDate = dateOrganisedImages.last?.creationDate {
+            
+            
+            //first check if there is a range of years
+            // if so need to include that info in groupong
+            
+            if let years = calender.dateComponents([.year], from: startDate, to: endDate).year {
+                
+                
+                let needToIncludeYears = years != 0
+                
+                
+                dateOrganisedImages.forEach { mapTagImage in
+                    if let date = mapTagImage.creationDate, let month = calender.dateComponents([.month], from: date).month, let day = calender.dateComponents([.day], from: date).day {
+                        
+                        var yearKey = ""
+                        if needToIncludeYears, let year = calender.dateComponents([.year], from: date).year {
+                            
+                            yearKey = "/\(year)"
+                        }
+                        
+                        
+                        // MARK: month grouping
+                        let monthKey = "\(month)" + yearKey
+                        
+                        if monthDict.keys.contains(monthKey) {
+                            monthDict[monthKey]?.append(mapTagImage)
+                        } else {
+                            monthDict[monthKey] = [mapTagImage]
+                        }
+                        
+                        
+                        // MARK: day grouping
+                        let dayKey = "\(day)" + "/\(monthKey)"
+                        if dayDict.keys.contains(dayKey) {
+                            dayDict[dayKey]?.append(mapTagImage)
+                        } else {
+                            dayDict[dayKey] = [mapTagImage]
+                        }
+                        
+                    }
+                }
+                
+                
+            }
+            
+            
+            
+
+        }
+        
+        
+        
+        
+        
+        
+
+        
+        return [:]
+    }
+    
     func monthGroupedImages(images: [MapTagImage]) -> [Int: [MapTagImage]] {
         var tempDict: [Int: [MapTagImage]] = [:]
         images.forEach { mapTagImage in
@@ -240,32 +344,39 @@ class PhotoSelectionViewModel: ObservableObject {
     private func loadImages(selectedImages: [PhotosPickerItem]) -> Progress {
         let totalProgress: MutableProgress = MutableProgress()
         selectedImages.forEach { image in
-            let progress = image.loadTransferable(type: MapTagImage.self) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let success?):
-                        if let identifier = image.itemIdentifier {
-                            let meta = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
-                            if let asset = meta.firstObject {
-                                let imageWithMetaData = MapTagImage(id: asset.localIdentifier, image: success.image, phAsset: asset)
-                                self.retrievedImages.append(imageWithMetaData)
-                                
+            if retrievedImages.contains(where: { mapTagImage in
+                mapTagImage.id == image.itemIdentifier
+            }) {
+                totalProgress.addChild(Progress(totalUnitCount: 0))
+                self.imageState = .success(self.retrievedImages)
+            } else {
+                let progress = image.loadTransferable(type: MapTagImage.self) { result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(let success?):
+                            if let identifier = image.itemIdentifier {
+                                let meta = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
+                                if let asset = meta.firstObject {
+                                    let imageWithMetaData = MapTagImage(id: asset.localIdentifier, image: success.image, phAsset: asset)
+                                    self.retrievedImages.append(imageWithMetaData)
+                                    
+                                } else {
+                                    self.retrievedImages.append(success)
+                                }
                             } else {
                                 self.retrievedImages.append(success)
                             }
-                        } else {
-                            self.retrievedImages.append(success)
+                            print("\(self.retrievedImages.count)")
+                            self.imageState = .success(self.retrievedImages)
+                        case .success(.none):
+                            self.imageState = .empty
+                        case .failure(let failure):
+                            self.imageState = .failure(failure)
                         }
-
-                        self.imageState = .success(self.retrievedImages)
-                    case .success(.none):
-                        self.imageState = .empty
-                    case .failure(let failure):
-                        self.imageState = .failure(failure)
                     }
                 }
+                totalProgress.addChild(progress)
             }
-            totalProgress.addChild(progress)
         }
         return totalProgress
     }
@@ -323,10 +434,11 @@ struct MapTagImage: Transferable, Identifiable, Equatable {
     }
     
     func getImageCoords() -> CLLocationCoordinate2D? {
-        return self.placemark?.location?.coordinate
+        
+//        return self.placemark?.location?.coordinate
         
         //TODO: REMOVE - DEBUG ONLY
-//        return CLLocationCoordinate2D(latitude: -40.900557, longitude: 174.885971)
+        return CLLocationCoordinate2D(latitude: -40.900557, longitude: 174.885971)
 //        if let coord = self.placemark?.location?.coordinate {    
 //        }
     }

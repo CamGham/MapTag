@@ -48,6 +48,10 @@ class MapViewModel: ObservableObject {
             }
         } catch {
             print("Error finding country \(error.localizedDescription)")
+            
+            //TODO: remove after debug
+            loc = CLLocation(latitude: -40.900557, longitude: 174.885971)
+            
         }
         return loc
     }

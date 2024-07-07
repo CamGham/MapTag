@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GlobeButtons: View {
     @Binding var openProfileSheet: Bool
-    @State var search = false
+    @Binding var search: Bool
     @State var searchQuery = ""
     
     private func showProfile() {
@@ -87,11 +87,11 @@ struct GlobeButtons: View {
                                         
                                         TextField(text: $searchQuery, prompt: Text("Search Countries...")){}
                                             .focused($searchBarIsFocused)
-                                            .onAppear(perform: {
-                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                                    searchBarIsFocused.toggle()
-                                                }
-                                            })
+//                                            .onAppear(perform: {
+//                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                                                    searchBarIsFocused.toggle()
+//                                                }
+//                                            })
                                             .textFieldStyle(.plain)
                                             .background(Color(.tertiarySystemGroupedBackground))
                                             .matchedGeometryEffect(id: "searchbar", in: searchBar, isSource: false)
@@ -157,6 +157,6 @@ struct GlobeButtons: View {
     ZStack {
         Color.black.opacity(0.2)
             .ignoresSafeArea()
-        GlobeButtons(openProfileSheet: .constant(false))
+        GlobeButtons(openProfileSheet: .constant(false), search: .constant(false))
     }
 }

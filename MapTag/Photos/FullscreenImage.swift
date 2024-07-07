@@ -12,7 +12,10 @@ struct FullscreenImage: View {
     @State var showToolbars = true
     
     var image: Image
+    var index: Int
     @Binding var isShowcased: Bool
+    
+    var imageView: Namespace.ID
     
     var body: some View {
         ZStack(alignment: .center) {
@@ -26,9 +29,13 @@ struct FullscreenImage: View {
             image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+                .ignoresSafeArea()
+                .matchedGeometryEffect(id: "image", in: imageView)
+//                .animation(.bouncy, value: showFullscreen)
+//                .matchedGeometryEffect(id: "image", in: imageView, isSource: false)
         }
         .zIndex(1.0)
-        .transition(.scale.combined(with: .slide))
+//        .transition(.scale.combined(with: .slide))
         .onTapGesture {
             showToolbars.toggle()
         }
@@ -39,7 +46,7 @@ struct FullscreenImage: View {
             
                 ToolbarItem(placement: .navigation) {
                     Button(action: {
-                        withAnimation(.easeIn) {
+                        withAnimation(.easeInOut) {
                             showFullscreen.toggle()
                         }
                     }, label: {
@@ -47,28 +54,34 @@ struct FullscreenImage: View {
                             .font(.headline)
                             .fontWeight(.semibold)
                     })
-                    .foregroundStyle(showToolbars ? Color.accentColor : .black)
+                    .opacity(showToolbars ? 1 : 0)
                     .disabled(!showToolbars)
                 }
             
                 ToolbarItem(placement: .principal) {
                     Text("Title")
+                        .opacity(showToolbars ? 1 : 0)
                 }
             
             ToolbarItem(placement: .confirmationAction) {
-                Button("Add to Showcase", systemImage: isShowcased ? "star.fill" : "star") {
+                
+                Button(action: {
                     isShowcased.toggle()
-                }
-                .foregroundStyle(showToolbars ? Color.accentColor : .black)
+                }, label: {
+                   Image(systemName: isShowcased ? "star.fill" : "star")
+                        .opacity(showToolbars ? 1 : 0)
+                })
                 .disabled(!showToolbars)
+                
+                
             }
         }
     }
 }
 
-#Preview {
-    NavigationStack {
-        
-        FullscreenImage(showFullscreen: .constant(true), image: Image("FoxGlacier"), isShowcased: .constant(false))
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        
+//        FullscreenImage(showFullscreen: .constant(true), image: Image("FoxGlacier"), index: 0, isShowcased: .constant(false))
+//    }
+//}

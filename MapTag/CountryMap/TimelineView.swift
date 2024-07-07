@@ -19,7 +19,7 @@ struct TimelineView: View {
     var textHeight: Double {
         height / Double(dateRange.count)
     }
-    
+    @Binding var updateDrag: Bool
     var body: some View {
         VStack {
             ForEach(dateRange.indices, id: \.self) { index in
@@ -36,13 +36,18 @@ struct TimelineView: View {
             })
         })
         .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .named("Dates")).onChanged({ dragValue in
+            
             dragPos = dragValue.location.y / textHeight
+            print("\(dragPos)")
             
 //                    dragPos = index
         }))
         .sensoryFeedback(.increase, trigger: currentIndex)
         .onChange(of: dragPos) { oldValue, newValue in
             currentIndex = Int(min(max(dragPos, Double(timelineRange.0)), Double(timelineRange.1 - 1)).rounded(.down))
+        }
+        .onChange(of: updateDrag) { oldValue, newValue in
+            dragPos = Double(currentIndex) + 0.5
         }
     }
 }
