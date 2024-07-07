@@ -51,6 +51,8 @@ struct MapHome: View {
     @State var loadMapAnnotations = false
     @State var search = false
 
+    
+    @Namespace var mainMap
     var body: some View {
         Group {
             switch mapVM.mapState {
@@ -72,6 +74,7 @@ struct MapHome: View {
                         
                         UserAnnotation()
                     }
+                    .matchedGeometryEffect(id: "map", in: mainMap)
                     .disabled(navigatedLocation != nil || search)
                     .mapStyle(.hybrid(elevation: .realistic,
                                       pointsOfInterest: PointOfInterestCategories.including(pointsOfInterest),
@@ -190,16 +193,16 @@ struct MapHome: View {
                         
                     }
                     
-                    Color.black.opacity(countryReady ? 1 : 0)
-                        .ignoresSafeArea()
-                        .zIndex(1.2)
-                        .onAppear {
-                            if countryReady {
-                                withAnimation(.easeOut(duration: 1.5)) {
-                                    countryReady.toggle()
-                                }
-                            }
-                        }
+//                    Color.black.opacity(countryReady ? 1 : 0)
+//                        .ignoresSafeArea()
+//                        .zIndex(1.2)
+//                        .onAppear {
+//                            if countryReady {
+//                                withAnimation(.easeOut(duration: 1.5)) {
+//                                    countryReady.toggle()
+//                                }
+//                            }
+//                        }
                     
                     //            LocationModalView(locationDict: photoSelectionVM.locationGroupedImages, navigatedLocation: $navigatedLocation)
                 }

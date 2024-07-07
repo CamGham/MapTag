@@ -16,7 +16,7 @@ struct CountryMap: View {
     var mapRegion: MKCoordinateRegion
     var calculatedCameraHeight: Double
     
-    @Namespace var innerLoc
+//    @Namespace var innerLoc
     var pointsOfInterest: [MKPointOfInterestCategory] = [.airport,.amusementPark,.aquarium,.bakery,.beach,.brewery, .cafe,.campground,.carRental,.foodMarket,.gasStation,.hotel,.marina,.museum,.nationalPark,.nightlife,.park,.parking,.publicTransport,.restaurant,.stadium,.store,.winery,.zoo]
     
     @State var mapCam: MapCameraPosition = .region((MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: -40.900557, longitude: 174.885971), span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))))
@@ -61,11 +61,12 @@ struct CountryMap: View {
     
     var groupings: [DateGroup] = [.custom, .month, .week, .day]
     
+    @Namespace var mainMap
     
     var body: some View {
         let _ = Self._printChanges()
         ZStack {
-            Map(position: $mapCam, bounds: MapCameraBounds(centerCoordinateBounds: mapRegion, maximumDistance: calculatedCameraHeight), interactionModes: [.pan, .zoom], scope: innerLoc) {
+            Map(position: $mapCam, bounds: MapCameraBounds(centerCoordinateBounds: mapRegion, maximumDistance: calculatedCameraHeight), interactionModes: [.pan, .zoom]) {
                 ForEach(Array(monthGroupedImages.keys), id: \.self) { monthInt in
                     
                     //TODO: check if this gets called evytime zoom changes - dont twant this
@@ -93,6 +94,7 @@ struct CountryMap: View {
 //                    }
                 }
             }
+            .matchedGeometryEffect(id: "map", in: mainMap)
             .mapStyle(.hybrid(elevation: .realistic,
                               pointsOfInterest: PointOfInterestCategories.including(pointsOfInterest),
                               showsTraffic: false))
@@ -185,18 +187,18 @@ struct CountryMap: View {
                 }
             }
             
-            Color.black
-                .opacity(countryLoaded ? 0 : 1)
-                .ignoresSafeArea()
+//            Color.black
+//                .opacity(countryLoaded ? 0 : 1)
+//                .ignoresSafeArea()
             
             
             
         }
         .onAppear(perform: {
             monthGroupedImages = photoVM.monthGroupedImages(images: photoVM.locationGroupedImages[location.country] ?? [])
-            withAnimation(.easeOut(duration: 1.0)) {
-                countryLoaded.toggle()
-            }
+//            withAnimation(.easeOut(duration: 1.0)) {
+//                countryLoaded.toggle()
+//            }
         })
         .onChange(of: currentLocation) { oldValue, newValue in
             // TODO: use old value to calc animation

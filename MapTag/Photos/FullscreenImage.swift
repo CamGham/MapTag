@@ -13,28 +13,31 @@ struct FullscreenImage: View {
     
     var image: Image
     var index: Int
-    @Binding var isShowcased: Bool
+        @State var isShowcased: Bool = true
+//    @Binding var isShowcased: Bool
     
     var imageView: Namespace.ID
     
     var body: some View {
-        ZStack(alignment: .center) {
-            if !showToolbars {
-                Color.black
-                    .ignoresSafeArea()
-            } else {
-                Color.white
-            }
+//        ZStack(alignment: .center) {
+//            if !showToolbars {
+//                Color.primary
+//                    .ignoresSafeArea()
+//            } else {
+//                Color.secondary
+//            }
                 
             image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+                .id(index)
                 .ignoresSafeArea()
-                .matchedGeometryEffect(id: "image", in: imageView)
+                .matchedGeometryEffect(id: index, in: imageView)
+//                .matchedGeometryEffect(id: "image", in: imageView)
 //                .animation(.bouncy, value: showFullscreen)
 //                .matchedGeometryEffect(id: "image", in: imageView, isSource: false)
-        }
-        .zIndex(1.0)
+//        }
+//        .zIndex(1.0)
 //        .transition(.scale.combined(with: .slide))
         .onTapGesture {
             showToolbars.toggle()
@@ -46,9 +49,11 @@ struct FullscreenImage: View {
             
                 ToolbarItem(placement: .navigation) {
                     Button(action: {
-                        withAnimation(.easeInOut) {
+                        
+                        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
                             showFullscreen.toggle()
                         }
+                        
                     }, label: {
                         Image(systemName: "chevron.left")
                             .font(.headline)
