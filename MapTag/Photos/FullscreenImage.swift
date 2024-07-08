@@ -12,7 +12,7 @@ struct FullscreenImage: View {
     @State var showToolbars = true
     
     var images: [MapTagImage]
-    var index: Int
+    var selectedIndex: Int
         @State var isShowcased: Bool = true
     
     var imageView: Namespace.ID
@@ -36,7 +36,12 @@ struct FullscreenImage: View {
                                 .aspectRatio(contentMode: .fit)
                                 .id(index)
                                 .containerRelativeFrame(.horizontal, alignment: .center)
-                                .matchedGeometryEffect(id: index, in: imageView)
+                                .matchedGeometryEffect(id: selectedIndex == index ? index : images.count, in: imageView, anchor: .center)
+                                .transaction { transaction in
+                                    if selectedIndex != index {
+                                        transaction.animation = nil
+                                    }
+                                }
                                 
                         }
                     }

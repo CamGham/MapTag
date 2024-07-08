@@ -63,7 +63,8 @@ struct ImageContainerView: View {
                                             .frame(width: geometry.size.width, height: geometry.size.height)
                                             .clipped()
                                             .id(index)
-                                            .matchedGeometryEffect(id: index, in: imageView)
+                                            .matchedGeometryEffect(id: index, in: imageView, anchor: .center)
+//                                            .matchedGeometryEffect(id: selectedIndex == index ? AnyHashable(index) : AnyHashable(UUID()), in: imageView)
 //                                            .matchedGeometryEffect(id: "image", in: imageView)
                                             .onTapGesture {
                                                 selectedIndex = index
@@ -71,7 +72,7 @@ struct ImageContainerView: View {
                                                 if images.count == 1 {
                                                     anchorPoint = 0
                                                 } else {
-                                                    anchorPoint = CGFloat(Double(index) / Double(images.count - 1))
+                                                    anchorPoint = CGFloat(Double(selectedIndex) / Double(images.count - 1))
                                                 }
                                                 print("\(anchorPoint)")
                                                 
@@ -175,7 +176,7 @@ struct ImageContainerView: View {
 //                    .aspectRatio(contentMode: .fit)
 //                    .ignoresSafeArea()
 //                    .matchedGeometryEffect(id: "image", in: imageView)
-                FullscreenImage(showFullscreen: $showFullscreen, images: images, index: selectedIndex, imageView: imageView, anchor: $anchorPoint)
+                FullscreenImage(showFullscreen: $showFullscreen, images: images, selectedIndex: selectedIndex, imageView: imageView, anchor: $anchorPoint)
                 
                     
             }
