@@ -35,6 +35,8 @@ struct ImageContainerView: View {
     
     @Namespace var imageView
     
+    @State var anchorPoint: CGFloat = 0
+    
     
     var body: some View {
         ZStack {
@@ -61,10 +63,18 @@ struct ImageContainerView: View {
                                             .frame(width: geometry.size.width, height: geometry.size.height)
                                             .clipped()
                                             .id(index)
-                                            .matchedGeometryEffect(id: index, in: imageView, anchor: .center)
+                                            .matchedGeometryEffect(id: index, in: imageView)
 //                                            .matchedGeometryEffect(id: "image", in: imageView)
                                             .onTapGesture {
                                                 selectedIndex = index
+                                                
+                                                if images.count == 1 {
+                                                    anchorPoint = 0
+                                                } else {
+                                                    anchorPoint = CGFloat(Double(index) / Double(images.count - 1))
+                                                }
+                                                print("\(anchorPoint)")
+                                                
                                                 withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
                                                     showFullscreen.toggle()
                                                 }
@@ -76,13 +86,6 @@ struct ImageContainerView: View {
                                                     Label("First Button", systemImage: "square.and.arrow.up")
                                                 }
 
-                                            } preview: {
-                                                // TODO: look into resizeable
-                                                images[index].image
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fill)
-                                                    .frame(width: 400, height: 400)
-                                                    .id(index)
                                             }
 
                                     })
@@ -104,7 +107,7 @@ struct ImageContainerView: View {
                                 
                                 LazyVGrid(columns: gridLayout, alignment: .leading, spacing: 2) {
                                     ForEach(dateGroupedImages[dateString]!.indices, id: \.self) { index in
-//                                        Button {
+                                        Button {
 //                                            selectedIndex = index
 //                                            //                                    withAnimation(.easeOut) {
 //                                            //                                        showFullscreen.toggle()
@@ -114,24 +117,28 @@ struct ImageContainerView: View {
 //                                                showFullscreen.toggle()
 //                                            }
 //                                            
-//                                        } label: {
+                                            selectedIndex = index
+                                            anchorPoint = CGFloat(index / images.count-1)
+                                            print("\(anchorPoint)")
+//                                                        scrollID = images[index].id
+                                            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                                                showFullscreen.toggle()
+                                            }
+                                        } label: {
                                             GeometryReader(content: { geometry in
                                                 images[index].image
                                                     .resizable()
                                                     .aspectRatio(contentMode: .fill)
                                                     .frame(width: geometry.size.width, height: geometry.size.height)
-                                                    .clipped()
-                                                    .onTapGesture {
-                                                        selectedIndex = index
-                                                        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
-                                                            showFullscreen.toggle()
-                                                        }
-                                                    }
+                                                    .clipped() 
+//                                                    .onTapGesture {
+//                                                        
+//                                                    }
                                             })
                                             .aspectRatio(1, contentMode: .fit)
                                             
                                             //                                    .animation(.bouncy, value: showFullscreen)
-//                                        }
+                                        }
                                     }
                                 }
                             }
@@ -168,7 +175,7 @@ struct ImageContainerView: View {
 //                    .aspectRatio(contentMode: .fit)
 //                    .ignoresSafeArea()
 //                    .matchedGeometryEffect(id: "image", in: imageView)
-                FullscreenImage(showFullscreen: $showFullscreen, image: images[selectedIndex].image, index: selectedIndex, imageView: imageView)
+                FullscreenImage(showFullscreen: $showFullscreen, images: images, index: selectedIndex, imageView: imageView, anchor: $anchorPoint)
                 
                     
             }

@@ -11,34 +11,42 @@ struct FullscreenImage: View {
     @Binding var showFullscreen: Bool
     @State var showToolbars = true
     
-    var image: Image
+    var images: [MapTagImage]
     var index: Int
         @State var isShowcased: Bool = true
-//    @Binding var isShowcased: Bool
     
     var imageView: Namespace.ID
     
+    @Binding var anchor: CGFloat
+    
     var body: some View {
-//        ZStack(alignment: .center) {
-//            if !showToolbars {
-//                Color.primary
-//                    .ignoresSafeArea()
-//            } else {
-//                Color.secondary
-//            }
-                
-            image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .id(index)
-                .ignoresSafeArea()
-                .matchedGeometryEffect(id: index, in: imageView)
-//                .matchedGeometryEffect(id: "image", in: imageView)
-//                .animation(.bouncy, value: showFullscreen)
-//                .matchedGeometryEffect(id: "image", in: imageView, isSource: false)
-//        }
+        ZStack(alignment: .center) {
+            if !showToolbars {
+                Color.primary
+                    .ignoresSafeArea()
+            } else {
+                Color.white
+            }
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal) {
+                    HStack(spacing: 0) {
+                        ForEach(images.indices, id: \.self) { index in
+                            images[index].image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .id(index)
+                                .containerRelativeFrame(.horizontal, alignment: .center)
+                                .matchedGeometryEffect(id: index, in: imageView)
+                                
+                        }
+                    }
+                    .scrollTargetLayout()
+                }
+                .defaultScrollAnchor(.init(x: anchor, y: 0))
+                .scrollTargetBehavior(.paging)
+            }
+        }
 //        .zIndex(1.0)
-//        .transition(.scale.combined(with: .slide))
         .onTapGesture {
             showToolbars.toggle()
         }
@@ -49,10 +57,12 @@ struct FullscreenImage: View {
             
                 ToolbarItem(placement: .navigation) {
                     Button(action: {
-                        
-                        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                        withAnimation(.smooth) {
                             showFullscreen.toggle()
                         }
+//                        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+//                            showFullscreen.toggle()
+//                        }
                         
                     }, label: {
                         Image(systemName: "chevron.left")

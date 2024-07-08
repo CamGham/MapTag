@@ -65,7 +65,7 @@ struct MapHome: View {
                     Map(position: $mapVM.mapCameraPosition, interactionModes: userInteractions, selection: $mapVM.selection) {
                         ForEach(mapVM.taggedLocations, id: \.self) { location in
                             
-                            Annotation(location.country, coordinate: location.location.coordinate) {
+                            Annotation(location.country, coordinate: location.location.coordinate, anchor: .bottom) {
                                 MapAnnotation()
                             }
                             .tag(location)
