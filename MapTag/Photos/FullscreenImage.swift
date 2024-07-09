@@ -20,13 +20,13 @@ struct FullscreenImage: View {
     @Binding var anchor: CGFloat
     
     var body: some View {
-        ZStack(alignment: .center) {
-            if !showToolbars {
-                Color.primary
-                    .ignoresSafeArea()
-            } else {
-                Color.white
-            }
+//        ZStack(alignment: .center) {
+//            if !showToolbars {
+//                Color.primary
+//                    .ignoresSafeArea()
+//            } else {
+//                Color.white
+//            }
             ScrollViewReader { proxy in
                 ScrollView(.horizontal) {
                     HStack(spacing: 0) {
@@ -50,7 +50,7 @@ struct FullscreenImage: View {
                 .defaultScrollAnchor(.init(x: anchor, y: 0))
                 .scrollTargetBehavior(.paging)
             }
-        }
+//        }
 //        .zIndex(1.0)
         .onTapGesture {
             showToolbars.toggle()
@@ -62,7 +62,7 @@ struct FullscreenImage: View {
             
                 ToolbarItem(placement: .navigation) {
                     Button(action: {
-                        withAnimation(.smooth) {
+                        withAnimation(.smooth.speed(0.2)) {
                             showFullscreen.toggle()
                         }
 //                        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {

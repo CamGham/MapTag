@@ -76,7 +76,7 @@ struct ImageContainerView: View {
                                                 }
                                                 print("\(anchorPoint)")
                                                 
-                                                withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                                                withAnimation(.spring(response: 0.5, dampingFraction: 0.7).speed(0.2)) {
                                                     showFullscreen.toggle()
                                                 }
                                             }
@@ -122,7 +122,7 @@ struct ImageContainerView: View {
                                             anchorPoint = CGFloat(index / images.count-1)
                                             print("\(anchorPoint)")
 //                                                        scrollID = images[index].id
-                                            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                                            withAnimation(.spring(response: 0.5, dampingFraction: 0.7).speed(0.2)) {
                                                 showFullscreen.toggle()
                                             }
                                         } label: {
@@ -137,6 +137,7 @@ struct ImageContainerView: View {
 //                                                    }
                                             })
                                             .aspectRatio(1, contentMode: .fit)
+                                            .zIndex(1.0)
                                             
                                             //                                    .animation(.bouncy, value: showFullscreen)
                                         }
@@ -151,6 +152,7 @@ struct ImageContainerView: View {
                         }
                     }
                 }
+                
                 .navigationTitle(title)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar(content: {
@@ -177,6 +179,7 @@ struct ImageContainerView: View {
 //                    .ignoresSafeArea()
 //                    .matchedGeometryEffect(id: "image", in: imageView)
                 FullscreenImage(showFullscreen: $showFullscreen, images: images, selectedIndex: selectedIndex, imageView: imageView, anchor: $anchorPoint)
+                    .zIndex(2.0)
                 
                     
             }
